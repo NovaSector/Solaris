@@ -223,7 +223,7 @@
 
 /obj/item/clothing/head/roguetown/helmet/heavy/guard/bogman
 	name = "steel bogman's helmet"
-	desc = "A helmet featuring the face of a snarling goblin. Once worn by the Bogmen, now a relic of old Azuria."
+	desc = "A helmet featuring the face of a snarling goblin. Once worn by the Bogmen, now a relic of old Sunmarch."
 	icon_state = "guardhelm"
 
 /obj/item/clothing/head/roguetown/helmet/heavy/guard/aalloy
@@ -1058,7 +1058,7 @@
 
 /obj/item/clothing/head/roguetown/helmet/heavy/frogmouth
 	name = "froggemund helmet"
-	desc = "A tall and imposing frogmouth-style helm popular in the highest plateaus of the Azure Peak. It covers not only the entire head and face, but the neck as well. Add some cloth to show the colors of your family or allegiance, or a nurse's veil to ward off the chilliness of a winterborn tournament."
+	desc = "A tall and imposing frogmouth-style helm popular in the highest plateaus of Sunmarch. It covers not only the entire head and face, but the neck as well. Add some cloth to show the colors of your family or allegiance, or a nurse's veil to ward off the chilliness of a winterborn tournament."
 	icon_state = "frogmouth"
 	item_state = "frogmouth"
 	emote_environment = 3
@@ -1111,7 +1111,7 @@
 
 /obj/item/clothing/head/roguetown/helmet/heavy/frogmouth/greatplume
 	name = "froggemund helmet with greatplume"
-	desc = "A tall and imposing frogmouth-style helm popular in the highest plateaus of the Azure Peak. It covers not only the entire head and face, but the neck as well. Mounted on the back is a larger couplet, capable of mounting a feathered greatplume; a blessing for the flamboyant-hearted."
+	desc = "A tall and imposing frogmouth-style helm popular in the highest plateaus of Solaris Ridge. It covers not only the entire head and face, but the neck as well. Mounted on the back is a larger couplet, capable of mounting a feathered greatplume; a blessing for the flamboyant-hearted."
 	icon_state = "frogmouthgreatplume"
 	item_state = "frogmouthgreatplume"
 	smelt_bar_num = 2

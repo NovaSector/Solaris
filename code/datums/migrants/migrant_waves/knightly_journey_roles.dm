@@ -27,7 +27,7 @@
 
 /datum/advclass/kj_knight
 	name = "Knight"
-	tutorial = "You are a knight from a distant land, a scion of a noble house visiting Azuria for one reason or another."
+	tutorial = "You are a knight from a distant land, a scion of a noble house visiting Sunmarch for one reason or another."
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_SHUNNED_UP
 	outfit = /datum/outfit/job/roguetown/adventurer/knighte_expert

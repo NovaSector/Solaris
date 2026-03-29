@@ -31,7 +31,7 @@
 			for(var/mob/dead/new_player/player as anything in GLOB.new_player_list)
 				if(!player.client)
 					continue
-				to_chat(player, span_danger("Matthios, is this true? Bandits flock to Azuria. four bandit slots have been opened."))
+				to_chat(player, span_danger("Matthios, is this true? Bandits flock to Sunmarch. four bandit slots have been opened."))
 	if(evilmode == "gnolls")
 		var/datum/job/gnoll_job = SSjob.GetJob("Gnoll")
 		gnoll_job.total_positions = min(gnoll_job.total_positions + 2, 4)
@@ -41,4 +41,4 @@
 			for(var/mob/dead/new_player/player as anything in GLOB.new_player_list)
 				if(!player.client)
 					continue
-				to_chat(player, span_danger("Graggar demands blood, gnolls flock to Azuria."))
+				to_chat(player, span_danger("Graggar demands blood, gnolls flock to Sunmarch."))

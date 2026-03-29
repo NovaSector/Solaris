@@ -9,7 +9,7 @@
 
 /obj/structure/roguemachine/steward
 	name = "nerve master"
-	desc = "A magitech device connected to the arteries of Azuria's royal treasury. When unlocked with the proper key, it can sway the fate of an entire kingdom's \
+	desc = "A magitech device connected to the arteries of Sunmarch's royal treasury. When unlocked with the proper key, it can sway the fate of an entire kingdom's \
 	finances. Stewards traditionally use these machines to export stockpiled goods for coinage, to pay-and-tax all accounts registered through the MEISTER, and to \
 	import supplies for taskings-a-plenty."
 	icon = 'icons/roguetown/misc/machines.dmi'
@@ -109,7 +109,7 @@
 		SStreasury.log_to_steward("-[amt] imported [D.name]")
 		record_round_statistic(STATS_STOCKPILE_IMPORTS_VALUE, amt)
 		if(amt >= 100) //Only announce big spending.
-			scom_announce("Azure Peak imports [D.name] for [amt] mammon.", )
+			scom_announce("Sunmarch imports [D.name] for [amt] mammon.", )
 		D.raise_demand()
 		addtimer(CALLBACK(src, PROC_REF(do_import), D.type), 10 SECONDS)
 	if(href_list["export"])

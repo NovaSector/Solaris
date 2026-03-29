@@ -299,8 +299,8 @@ a.choose-btn:hover {
 <div class="abilities">
 <h4>Abilities</h4>
 <ul>
-<li><b>Azurean Phalanx</b> — 3-tile line thrust that pushes enemies back 1 tile. Empowered: doubles damage.</li>
-<li><b>Azurean Javelin</b> — Hurl an armor-piercing phantom spear that slows. No slowdown while charging.</li>
+<li><b>Sunmarcher Phalanx</b> — 3-tile line thrust that pushes enemies back 1 tile. Empowered: doubles damage.</li>
+<li><b>Sunmarcher Javelin</b> — Hurl an armor-piercing phantom spear that slows. No slowdown while charging.</li>
 <li><b>Advance!</b> — Leap forward up to 4 tiles, passing through enemies, then stab ahead on landing. Brief chargeup before leaping. Empowered: doubles damage.</li>
 <li><b>Gate of Reckoning</b> — Conjure a portal above a target, raining phantom spears down, then blink to their position and sweep everyone around you.</li>
 </ul>
@@ -348,14 +348,14 @@ a.choose-btn:hover {
 </div>
 <div class="preamble">
 <p>O! Blade of Tarichea!</p>
-<p>There was once a great city. On the foot of this very mountain, over the Azure Sea.</p>
+<p>There was once a great city. On the foot of this very mountain, over the Solarian Sea.</p>
 <p>It prospered, and in its midst, our warriors practiced their art, combining the arcyne with blades.</p>
 <p>We were masters! Our skills, unmatched! Our techniques, unparalleled! Envy of the world!</p>
 <p>No Ranesheni bladedancers, or Kazengunese bladesmen, or Grenzelhoftian mercenaries, could match our prowess!</p>
 <p>Mages! Knights! Demons! All fell before our blade.</p>
 <p class="loud">THEN — SHE ASCENDED, ALL WAS LOST.</p>
 <p class="loud">OR WAS IT?</p>
-<p>O! Blade of Azurea!</p>
+<p>O! Blade of Sunmarch!</p>
 <p class="closing">[preamble_closing]</p>
 </div>
 </div>
@@ -367,7 +367,7 @@ a.choose-btn:hover {
 /proc/get_blade_chant_text(faction, mob/living/carbon/human/H)
 	switch(faction)
 		if("blackoak")
-			return {"<p><em>I am a blade of Tarichea — Azuria, her name reborn!</em></p>
+			return {"<p><em>I am a blade of Tarichea — Sunmarch, her name reborn!</em></p>
 <p><em>The sword is my law! Blood my ink!</em></p>
 <p><em>True is my strike! Sharp is my edge!</em></p>
 <p><em>With a dozen cuts I shall defend our home.</em></p>
@@ -395,7 +395,7 @@ a.choose-btn:hover {
 <p><em>Not even the gods shall stop us!</em></p>
 <p><em>In Tarichea's name, we are unshea—</em></p>
 <p><b>WAKE UP. WAKE UP.</b></p>"}
-	return {"<p><em>I am a blade of Azuria.</em></p>
+	return {"<p><em>I am a blade of Sunmarch.</em></p>
 <p><em>The sword is my voice, and war my verse.</em></p>
 <p><em>True is my strike and sharp is my edge.</em></p>
 <p><em>With a hundred cuts I shall cleanse our land of its foes.</em></p>
@@ -405,7 +405,7 @@ a.choose-btn:hover {
 /proc/get_phalanx_chant_text(faction, mob/living/carbon/human/H)
 	switch(faction)
 		if("blackoak")
-			return {"<p><em>I am a blade of Tarichea — Azuria, her name reborn!</em></p>
+			return {"<p><em>I am a blade of Tarichea — Sunmarch, her name reborn!</em></p>
 <p><em>The glaive is my law! Blood my ink!</em></p>
 <p><em>Swift is my strike! Sharp is my edge!</em></p>
 <p><em>With a dozen cuts I shall hew our foe.</em></p>
@@ -433,7 +433,7 @@ a.choose-btn:hover {
 <p><em>Not even the gods shall stop us!</em></p>
 <p><em>In Tarichea's name, we march for—</em></p>
 <p><b>WAKE UP. WAKE UP.</b></p>"}
-	return {"<p><em>I am a shield of Azuria.</em></p>
+	return {"<p><em>I am a shield of Sunmarch.</em></p>
 <p><em>The spear is my reach, and duty my anchor.</em></p>
 <p><em>True is my strike and long is my reach.</em></p>
 <p><em>With a hundred thrusts I shall hold our foe at bay.</em></p>
@@ -443,7 +443,7 @@ a.choose-btn:hover {
 /proc/get_macebearer_chant_text(faction, mob/living/carbon/human/H)
 	switch(faction)
 		if("blackoak")
-			return {"<p><em>I am a mace of Tarichea — Azuria, her name reborn!</em></p>
+			return {"<p><em>I am a mace of Tarichea — Sunmarch, her name reborn!</em></p>
 <p><em>The hammer is my law! Blood my ink!</em></p>
 <p><em>Never bowed! Never stopped!</em></p>
 <p><em>With a dozen blows I shall crush all who threaten our home.</em></p>
@@ -471,7 +471,7 @@ a.choose-btn:hover {
 <p><em>Not even the gods shall stop us!</em></p>
 <p><em>In Tarichea's name, we charge for—</em></p>
 <p><b>WAKE UP. WAKE UP.</b></p>"}
-	return {"<p><em>I am a mace of Azuria.</em></p>
+	return {"<p><em>I am a mace of Sunmarch.</em></p>
 <p><em>The hammer is my word, and ruin my punctuation.</em></p>
 <p><em>Never bowed! Never stopped!</em></p>
 <p><em>With a hundred blows I shall shatter our foes to dust.</em></p>

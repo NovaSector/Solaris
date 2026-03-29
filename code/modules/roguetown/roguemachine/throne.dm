@@ -1,7 +1,7 @@
 GLOBAL_VAR(king_throne)
 
 /obj/structure/roguethrone
-	name = "throne of Azure Peak"
+	name = "throne of Sunmarch"
 	desc = "A big throne, to hold the Lord's giant personality. Say 'secrets of the throat' with the crown on your head if you are confused."
 	icon = 'icons/roguetown/misc/96x96.dmi'
 	icon_state = "throne"
@@ -130,7 +130,7 @@ GLOBAL_VAR(king_throne)
 
 /obj/structure/roguethrone/get_mechanics_examine(mob/user)
 	. = ..()
-	. += span_info("<b>Throat Commands</b> (say these at the Throat of Azure Peak):")
+	. += span_info("<b>Throat Commands</b> (say these at the Throat of Sunmarch):")
 	. += span_info("'Make Announcement' - broadcast a message (requires crown)")
 	. += span_info("'Make Decree' - issue a royal decree (requires crown, ruler only)")
 	. += span_info("'Purge Decrees' - remove all decrees (requires crown, ruler only)")

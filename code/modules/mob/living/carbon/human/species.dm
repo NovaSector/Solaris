@@ -20,7 +20,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 	var/base_name
 	var/sub_name
 	var/psydonic = FALSE
-	var/origin = "Azuria"
+	var/origin = "Sunmarcher"
 	var/origin_default = /datum/virtue/origin/azuria
 	var/max_age = 75
 	var/is_subrace = FALSE

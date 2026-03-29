@@ -11,10 +11,10 @@
 	desc = "<b>Axian</b><br>\
 	Axians are a proud, shark-like people that have a heritage founded in maritime trade, \
 	tax evasion, and piracy. They have a strong distaste for the nobility and taxation, \
-	making them a target of discrimination in the Azurean lands. They are oftentimes scapegoats for crime. \
+	making them a target of discrimination in the Sunmarch's lands. They are oftentimes scapegoats for crime. \
 	Due to their penchant for trade and travel, they can be found all over the world, oftentimes \
 	seeing places many could not even dream of. They look down at those they considered the 'settled' \
-	and often uproot themselves quite often in their lifetimes. However, due to the isolation in Azure, many Axians \
+	and often uproot themselves quite often in their lifetimes. However, due to the isolation in Sunmarch, many Axians \
 	find their sanity being clawed away as they find themselves stuck in one place.<br>\
 	<span style='color: #6a8cb7;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;'><b>+1 WIL | +1 CON </b></span><br>"
 	species_traits = list(EYECOLOR,LIPS,STUBBLE,MUTCOLORS)

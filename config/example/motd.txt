@@ -1,3 +1,2 @@
 <!-- Most valid html will work in here, excluding images. -->
-Azure Peak Discord Server: <a href="https://discord.gg/NCFXUAgCPT">https://discord.gg/NCFXUAgCPT</a>
-Azure Peak Patreon: <a href="https:ko-fi.com/azurepeak">https:ko-fi.com/azurepeak</a>
+Azure Peak Discord Server: <a href="https://discord.gg/novasector">https://discord.gg/novasector</a>

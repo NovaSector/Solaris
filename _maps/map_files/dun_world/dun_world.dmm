@@ -11888,7 +11888,7 @@
 /obj/structure/fluff/railing/wood/north,
 /obj/structure/fluff/customsign{
 	name = "LITTERING IS UNCHIVILAROUS";
-	wrotesign = "LITTERING IS UNCHIVALROUS! THE JUDICIARY OF AZURIA HAS DECLARED LITTERING A CRIME. PLACE UNWANTED ITEMS IN A BIN TODAE!"
+	wrotesign = "LITTERING IS UNCHIVALROUS! THE JUDICIARY OF Sunmarch HAS DECLARED LITTERING A CRIME. PLACE UNWANTED ITEMS IN A BIN TODAE!"
 	},
 /turf/open/floor/rogue/grass,
 /area/rogue/outdoors/mountains)
@@ -19936,7 +19936,7 @@
 "erq" = (
 /obj/structure/mineral_door/wood/window{
 	lockid = "university";
-	name = "University of Azuria";
+	name = "University of Sunmarch";
 	locked = 1
 	},
 /turf/open/floor/rogue/concrete,
@@ -39994,7 +39994,7 @@
 "iEi" = (
 /obj/structure/fluff/signage{
 	dir = 4;
-	name = "AZURE PEAK - EAST"
+	name = "SUNMARCH - EAST"
 	},
 /turf/open/floor/rogue/grass,
 /area/rogue/outdoors/mountains)
@@ -42528,7 +42528,7 @@
 /area/rogue/indoors/shelter)
 "jhi" = (
 /obj/structure/roguemachine/mail/l{
-	mailtag = "University of Azuria Library"
+	mailtag = "University of Sunmarch Library"
 	},
 /obj/machinery/light/rogue/torchholder/l,
 /mob/living/simple_animal/pet/cat/rogue/black/academy{
@@ -48660,7 +48660,7 @@
 /area/rogue/outdoors/town)
 "kvc" = (
 /obj/structure/fluff/walldeco/goblet{
-	name = "Azurian Pints Inn and Bath"
+	name = "Sunmarch Pints Inn and Bath"
 	},
 /obj/machinery/light/rogue/torchholder/c,
 /turf/open/floor/rogue/ruinedwood/spiral,
@@ -78443,7 +78443,7 @@
 "qFP" = (
 /obj/structure/fluff/customsign{
 	name = "LITTERING IS UNCHIVILAROUS";
-	wrotesign = "LITTERING IS UNCHIVALROUS! THE JUDICIARY OF AZURIA HAS DECLARED LITTERING A CRIME. PLACE UNWANTED ITEMS IN A BIN TODAE!"
+	wrotesign = "LITTERING IS UNCHIVALROUS! THE JUDICIARY OF SUNMARCH HAS DECLARED LITTERING A CRIME. PLACE UNWANTED ITEMS IN A BIN TODAE!"
 	},
 /turf/open/floor/rogue/dirt,
 /area/rogue/outdoors/town)
@@ -79992,7 +79992,7 @@
 "qWB" = (
 /obj/structure/fluff/signage{
 	dir = 8;
-	name = "AZURE PEAK - WEST"
+	name = "SUNMARCH - WEST"
 	},
 /turf/open/floor/rogue/grass,
 /area/rogue/outdoors/town)
@@ -82133,7 +82133,7 @@
 "ruy" = (
 /obj/structure/fluff/signage{
 	dir = 1;
-	name = "AZURE PEAK - NORTHWEST"
+	name = "SUNMARCH - NORTHWEST"
 	},
 /turf/open/floor/rogue/cobblerock,
 /area/rogue/outdoors/town)
@@ -92253,7 +92253,7 @@
 "tzc" = (
 /obj/structure/fluff/signage{
 	dir = 8;
-	name = "AZURE PEAK - WEST"
+	name = "SUNMARCH - WEST"
 	},
 /turf/open/floor/rogue/dirt,
 /area/rogue/outdoors/town)
@@ -109773,7 +109773,7 @@
 /area/rogue/outdoors/town/roofs/keep)
 "xkL" = (
 /obj/structure/fluff/signage{
-	name = "AZURE PEAK - SOUTH"
+	name = "SUNMARCH - SOUTH"
 	},
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/outdoors/rtfield)
@@ -111637,7 +111637,7 @@
 /area/rogue/druidsgrove)
 "xFd" = (
 /obj/structure/fluff/signage{
-	name = "AZURE PEAK - SOUTH"
+	name = "SUNMARCH - SOUTH"
 	},
 /turf/open/floor/rogue/dirt,
 /area/rogue/outdoors/town)
