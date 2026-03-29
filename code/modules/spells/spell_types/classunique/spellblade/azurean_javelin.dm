@@ -18,7 +18,7 @@ Chargetime reduced from 20 to 10 ticks (1 second) to feel less awkward.
 */
 
 /obj/effect/proc_holder/spell/invoked/projectile/azurean_javelin
-	name = "Azurean Javelin"
+	name = "Sunmarcher Javelin"
 	desc = "The ancient art of skirmishers in arcyne form - conjure a phantom spear and hurl it. \
 		Armor-piercing (20 AP), slows the target on hit for 4 seconds regardless of armor. \
 		At 3+ momentum: consumes 3 to double damage. \
@@ -77,7 +77,7 @@ Chargetime reduced from 20 to 10 ticks (1 second) to feel less awkward.
 	. = ..()
 
 /obj/projectile/energy/azurean_javelin
-	name = "Azurean Javelin"
+	name = "Sunmarcher Javelin"
 	icon_state = "air_blade_stab"
 	damage = 25
 	woundclass = BCLASS_STAB
@@ -100,16 +100,16 @@ Chargetime reduced from 20 to 10 ticks (1 second) to feel less awkward.
 			log_combat(firer, L, "javelin-struck")
 
 /obj/projectile/energy/azurean_javelin/empowered
-	name = "Empowered Azurean Javelin"
+	name = "Empowered Sunmarcher Javelin"
 	icon_state = "youreyesonly"
 	armor_penetration = PEN_MEDIUM
 
 /obj/projectile/energy/azurean_javelin/arc
-	name = "Arced Azurean Javelin"
+	name = "Arced Sunmarcher Javelin"
 	arcshot = TRUE
 
 /obj/projectile/energy/azurean_javelin/empowered/arc
-	name = "Empowered Arced Azurean Javelin"
+	name = "Empowered Arced Sunmarcher Javelin"
 	arcshot = TRUE
 
 /datum/status_effect/debuff/azurean_javelin_slow

@@ -6,9 +6,9 @@
 	origin_desc = "Wanderers, peasantry, abandoned orphans or souls left to wander the bygone world, with no identity associated with them."
 
 /datum/virtue/origin/azuria
-	name = "Azurian"
-	origin_name = "Azuria"
-	desc = "I originate from the settled lands of Azuria, an independent domain sandwiched between Otava and Grenzelhoft. Famed for its delicious waffles and many ancient ruins, it is neither prosperous nor well-respected.<br>"
+	name = "Sunmarcher"
+	origin_name = "Sunmarcher"
+	desc = "I originate from the settled lands of Sunmarch, an independent domain sandwiched between Otava and Grenzelhoft. Famed for its delicious waffles and many ancient ruins, it is neither prosperous nor well-respected.<br>"
 	restricted = FALSE
 	added_languages = list(/datum/language/oldazurian)
 	origin_desc = "PING THE LORE TEAM TO ADD THIS"
@@ -215,12 +215,12 @@
 	The Underdark itself is a gigantic system of different caves, caverns tunnels and hollowed out underground regions that span leagues upon \
 	leagues both across and deep into Psydonia's soil. Not all of these systems are inherenty connected, paved or make logical sense,  but the \
 	Underdwellers always have  knack for traversing them. Underdark as a whole, is split into Western and Eastern, Western being the one that \
-	resides beneath Azuria and its continent, and the Eastern that is located deep within Raneshen and Kazengun's soil, noticeably less populated \
+	resides beneath Sunmarch and its continent, and the Eastern that is located deep within Raneshen and Kazengun's soil, noticeably less populated \
 	than the western counterpart, shrouded in mystery; more so than the other. Most important fact remains, Western and Eastern Underdark are NOT \
 	connected directly, only point where one could pass from one into the other, in theory being a marvel of artifice, constructed by the deep \
 	dwarves, known as Duergar. Their hostile and isolationist nature prevents any who seek passage through their fortress of artifice that sits \
 	above the vast molten sea in the deepest of depths, from obtaining it in this lyfe. This makes Eastern Underdwellers somewhat more rare in \
-	places lyke Azuria due to the sheer difficulty and amount of hoops one'd need to jump through to reach its forests.\n<br><br>\
+	places lyke Sunmarch due to the sheer difficulty and amount of hoops one'd need to jump through to reach its forests.\n<br><br>\
 	\
 	Underdwellers live a harsh lyfe, filled with hard toil, sweat and blood, and thusly they are no strangers to violence and darker things one \
 	could experience in mortal lyfe. Most settlements in these depths practice some sort of violent cultural tradition, engage in bloodsports, or \

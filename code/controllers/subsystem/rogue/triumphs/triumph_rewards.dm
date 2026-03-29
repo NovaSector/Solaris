@@ -8,7 +8,7 @@
 
 /obj/item/reagent_containers/glass/bottle/alchemical/tripot
 	name = "vial of distilled triumphance"
-	desc = "The fruits of your labor, distilled into a sparkling pittance that shimmers with Azurian light. Sipping this tincture will lightly amplify all of your characteristics for a week's tyme."
+	desc = "The fruits of your labor, distilled into a sparkling pittance that shimmers with Sunmarcher light. Sipping this tincture will lightly amplify all of your characteristics for a week's tyme."
 	list_reagents = list(/datum/reagent/buff/tri = 10)
 
 /datum/reagent/buff/tri //Keep this restricted to the TRI-locked alchemic reward.
@@ -29,7 +29,7 @@
 
 /atom/movable/screen/alert/status_effect/buff/alch/tripot
 	name = "Triumphance"
-	desc = "My latest triumph has empowered me! I am a true champion of Azuria!"
+	desc = "My latest triumph has empowered me! I am a true champion of Sunmarch!"
 	icon_state = "triumph"
 
 //

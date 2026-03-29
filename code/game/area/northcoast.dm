@@ -23,7 +23,7 @@
 				/mob/living/carbon/human/species/orc/npc/berserker = 10,
 				/mob/living/carbon/human/species/orc/npc/marauder = 10,
 				/mob/living/carbon/human/species/goblin/npc/ambush/sea = 40)
-	first_time_text = "THE AZURE COAST"
+	first_time_text = "THE SUNMARCH COAST"
 	converted_type = /area/rogue/indoors/shelter/woods
 	deathsight_message = "somewhere betwixt Abyssor's realm and Dendor's bounty"
 	threat_region = THREAT_REGION_AZUREAN_COAST

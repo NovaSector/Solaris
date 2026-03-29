@@ -398,7 +398,7 @@
 	name = "Thespian-Errant"
 	tutorial = "Gladiators from the arenas of Raneshen and Lirvas, reenactors from the curtain-dazzled courts of Otava and Grenzelhoft, and \
 	shieldbearers from the outermost reaches of Psydonia itself; all are unified in their subconscious pursuit of entertaining something greater \
-	than themselves. You are a skilled combatant from beyond Azuria, who - for one reason or another - is intimately familiar with fighting in ancient equipment."
+	than themselves. You are a skilled combatant from beyond Solaris Ridge, who - for one reason or another - is intimately familiar with fighting in ancient equipment."
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/roguetown/adventurer/bronzeclad
 	cmode_music = 'sound/music/combat_thespian.ogg'

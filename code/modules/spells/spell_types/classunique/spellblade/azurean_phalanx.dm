@@ -5,7 +5,7 @@ Builds 1 momentum on hit regardless of targets struck (same as a normal weapon s
 At 3+ momentum: consumes 3 stacks and doubles damage. */
 
 /obj/effect/proc_holder/spell/invoked/azurean_phalanx
-	name = "Azurean Phalanx"
+	name = "Sunmarch Phalanx"
 	desc = "Hold the line. Thrust forward with arcyne-infused reach, striking a 3-tile line and pushing them back 1 tile. \
 		Builds 1 momentum on hit. \
 		At 3+ momentum: consumes 3 to double damage. \
@@ -23,7 +23,7 @@ At 3+ momentum: consumes 3 stacks and doubles damage. */
 	movement_interrupt = FALSE
 	charging_slowdown = 0
 	chargedloop = /datum/looping_sound/invokegen
-	invocations = list("Phalanx Azurea!")
+	invocations = list("Phalanx Sunmarcher!")
 	invocation_type = "shout"
 	gesture_required = TRUE
 	xp_gain = FALSE
@@ -121,10 +121,10 @@ At 3+ momentum: consumes 3 stacks and doubles damage. */
 				deflected = TRUE
 				continue
 			if(empowered)
-				arcyne_strike(H, victim, held_weapon, round(damage / 2), def_zone, BCLASS_STAB, spell_name = "Azurean Phalanx", skip_message = TRUE)
-				arcyne_strike(H, victim, held_weapon, round(damage / 2), def_zone, BCLASS_STAB, spell_name = "Azurean Phalanx")
+				arcyne_strike(H, victim, held_weapon, round(damage / 2), def_zone, BCLASS_STAB, spell_name = "Sunmarcher Phalanx", skip_message = TRUE)
+				arcyne_strike(H, victim, held_weapon, round(damage / 2), def_zone, BCLASS_STAB, spell_name = "Sunmarcher Phalanx")
 			else
-				arcyne_strike(H, victim, held_weapon, damage, def_zone, BCLASS_STAB, spell_name = "Azurean Phalanx")
+				arcyne_strike(H, victim, held_weapon, damage, def_zone, BCLASS_STAB, spell_name = "Sunmarcher Phalanx")
 			hit_count++
 			already_hit += victim
 
@@ -145,4 +145,4 @@ At 3+ momentum: consumes 3 stacks and doubles damage. */
 			M.add_stacks(1)
 			to_chat(H, span_notice("DOUBLE STRIKE! ARCYNE SURGE!"))
 
-	log_combat(H, null, "used Azurean Phalanx")
+	log_combat(H, null, "used Sunmarcher Phalanx")

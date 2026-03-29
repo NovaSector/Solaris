@@ -78,7 +78,7 @@
 #define TRAIT_DEATHBARGAIN "Death Bargain" // Used by UNDERMAIDEN'S BARGAIN
 #define TRAIT_RITUALIST "Ritualist"  // Allows use of ritual chalk
 #define TRAIT_INQUISITION "Otavan Adherent"
-#define TRAIT_CLERGY "Clergy of the Azurian Church"
+#define TRAIT_CLERGY "Clergy of the Sunmarch Church"
 #define TRAIT_GOODTRAINER "Good Trainer"
 #define TRAIT_BADTRAINER "Bad Trainer"
 #define TRAIT_OUTDOORSMAN "Outdoorsman"
@@ -233,7 +233,7 @@
 #define TRAIT_DARKVISION "Darksight"
 #define TRAIT_NOCSHADES "Nocshaded"
 #define TRAIT_LIGHT_STEP	"Light Step"
-#define TRAIT_AZURENATIVE "Azure Native"
+#define TRAIT_AZURENATIVE "Solaris Ridge Native"
 #define TRAIT_SLEUTH	"Sleuth"
 #define TRAIT_HARDSHELL "Hardshell"
 #define TRAIT_WOODWALKER "Woodwalker"
@@ -293,15 +293,15 @@ GLOBAL_LIST_INIT(roguetraits, list(
 	TRAIT_LEPROSY = span_necrosis("I'm a disgusting leper..."),
 	TRAIT_UNDIVIDED = span_info("I have seen past petty squabbles, and am a true follower of the Ten Undivided. I feel most comfortable around churchmen."),
 	TRAIT_TAVERN_FIGHTER = span_info("I am vigilant in my duties. The Tavern is my home, none shall dare oppose me or skip out on payment."),
-	TRAIT_GUARDSMAN = span_info("I am vigilant in my duties. In the town of Azure Peak, my abilities are sharper due to my routine and familiarity."),
+	TRAIT_GUARDSMAN = span_info("I am vigilant in my duties. In the town of Sunmarch, my abilities are sharper due to my routine and familiarity."),
 	TRAIT_GUARDSMAN_DISGRACED = span_warning("I have betrayed my oath. My vigilance falters in the town. I must beg forgiveness to restore my honor, or see my betrayal through to the end."),
-	TRAIT_WOODSMAN = span_info("I am vigilant in my duties. In the grove and coast of Azure Peak, my abilities are sharper due to my routine and familiarity."),
+	TRAIT_WOODSMAN = span_info("I am vigilant in my duties. In the grove and coast of Solaris Ridge, my abilities are sharper due to my routine and familiarity."),
 	TRAIT_ANTHRAXI = span_info("I am the deadliest being in the underdark. No beast or foe can ever hope to match me in the caves."),
 	TRAIT_DEATHBARGAIN = span_info("A horrible deal has been prepared in your name. May you never see it fulfilled..."),
 	TRAIT_RITUALIST = span_info("I am skilled in the holy arts. Using ritual chalk, I can more deftly channel my God's powers via runes."),
 	TRAIT_INSPIRING_MUSICIAN = span_info("The flow of battle dances to my song!"),
 	TRAIT_INQUISITION = span_info("I serve the Holy Otavan Inquisition. From a passing glance, I can recognize all other adherents within the local sect."),
-	TRAIT_CLERGY = span_info("I serve the Church of the Ten in Azuria. From a passing glance, I can recognize all other clergy of this Church."),
+	TRAIT_CLERGY = span_info("I serve the Church of the Ten in Sunmarch. From a passing glance, I can recognize all other clergy of this Church."),
 	TRAIT_CHOSEN = "Astrata choose you to represent her glory.",
 	TRAIT_WEBWALK = "I can move freely between webs.",
 	TRAIT_NOSTINK = span_dead("My nose is numb to the smell of decay."),
@@ -442,7 +442,7 @@ GLOBAL_LIST_INIT(roguetraits, list(
 	TRAIT_NOHUNGER = span_info("I do not hunger, or thirst."),
 	TRAIT_DARKVISION = span_info("I can see better in the dark."),
 	TRAIT_NOCSHADES = span_info("The lens I look through allows me to see in the dark clear as dae, at the cost of greater vision."),
-	TRAIT_RESIDENT = span_info("I've been granted a Meister account, and the ownership of a house in Azure Peak."),
+	TRAIT_RESIDENT = span_info("I've been granted a Meister account, and the ownership of a house in Sunmarch."),
 	TRAIT_LIGHT_STEP = span_info("My steps are light and swift. I make less noise while sneaking and wearing armor, and can sneak much quicker."),
 	TRAIT_NOMOOD = span_info("I feel no sorrow, no joy, and no stress."),
 	TRAIT_AZURENATIVE = span_info("I've grown up and lived all my lyfe in these lands. I can only trigger ambushes if I sprint through them."),
@@ -494,7 +494,7 @@ GLOBAL_LIST_INIT(roguetraits, list(
 	TRAIT_SILVER_WEAK = span_warning("Silver is the greatest threat to my lyfe. Blows from silver weapons will set me alight, inhibit my ability to regenerate, and - if blessed - can outright destroy my vessel."),
 	TRAIT_COMBAT_AWARE = span_notice("My honed senses and intuition allow me to spot notable things in the midst of battle with ease."),
 	TRAIT_TEMPO	= span_greentext("I can keep up with multiple opponents at once."),
-	TRAIT_BLACKOAK = span_warning("The Black Oaks can spot <b>any</b> foreigners and outsiders, no matter how long they've lived in Azuria. I can spot an invader at a glance."),
+	TRAIT_BLACKOAK = span_warning("The Black Oaks can spot <b>any</b> foreigners and outsiders, no matter how long they've lived in Solaris Ridge. I can spot an invader at a glance."),
 	TRAIT_DREAMWALKER = span_warning("I walk the dream and reality at the same time. My mind frays, but my vision shall be reality."),
 	TRAIT_ENGINEERING_GOGGLES = span_warning("I can see structural details others can't."),
 	TRAIT_ASSASSIN = span_warning("My soul has been tainted by foul spirits, through them I honor my pact."),

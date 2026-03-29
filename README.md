@@ -1,10 +1,21 @@
-# AZURE PEAK
+# SOLARIS RIDGE
 
-| Website                   | Link                                           |
-|---------------------------|------------------------------------------------|
-| Discord | [https://discord.gg/NCFXUAgCPT](https://discord.gg/NCFXUAgCPT)
-| Code    | [https://github.com/Azure-Peak/Azure-Peak](https://github.com/GeneralPantsuIsBadAtCoding/Azure-Peak)    |
-| Wiki    | [https://azurepeak.miraheze.org/wiki/Main_Page](https://azurepeak.miraheze.org/wiki/Main_Page) |
+| Website    | Link                                                                 |
+|------------|----------------------------------------------------------------------|
+| Discord    | [https://discord.gg/novasector](https://discord.gg/novasector)       |
+| Code       | [https://github.com/NovaSector/Solaris](https://github.com/NovaSector/Solaris) |
+| Wiki       | [https://solaris.novasector13.com](https://solaris.novasector13.com) *(deprecated — contents reflect old lore no longer considered canon)* |
+| Upstream   | [https://github.com/Azure-Peak/Azure-Peak](https://github.com/Azure-Peak/Azure-Peak) |
+
+## CONTRIBUTING
+
+Solaris Ridge maintains Azure Peak as its upstream. To keep merges clean and sustainable, all contributors must follow these rules:
+
+- **No direct pushes to `main`.** All changes must come in via Pull Request from a working branch.
+- **Modularize Solaris-specific changes.** Any content, role, antag, flavor text, or mechanic that is specific to Solaris Ridge must be placed in an appropriately named Solaris module folder. Do not modify upstream files directly if the change is ours alone.
+- **Changelog entries are required** for all player-facing changes.
+- **Changes to jobs, antags, content or roles** require maintainer review. 
+- General bug fixes and QoL improvements may be contributed back upstream to Azure Peak where appropriate.
 
 ## LICENSE
 Original Fork Originates from [commit c28b351807bad950d2b323ada048190844bbda32](https://github.com/tgstation/tgstation/commit/c28b351807bad950d2b323ada048190844bbda32).

@@ -53,7 +53,7 @@
 
 /datum/advclass/noble/knighte
 	name = "Knight Errant"
-	tutorial = "You are a knight from a distant land, a scion of a noble house visiting Azuria for one reason or another."
+	tutorial = "You are a knight from a distant land, a scion of a noble house visiting Sunmarch for one reason or another."
 	outfit = /datum/outfit/job/roguetown/adventurer/knighte
 	traits_applied = list(TRAIT_NOBLE, TRAIT_HEAVYARMOR, TRAIT_STEELHEARTED)
 	subclass_stats = list(
@@ -84,7 +84,7 @@
 /datum/outfit/job/roguetown/adventurer/knighte/pre_equip(mob/living/carbon/human/H)
 	..()
 	if(H.mind)
-		to_chat(H, span_warning("You are a knight from a distant land, a scion of a noble house visiting Azuria for one reason or another."))
+		to_chat(H, span_warning("You are a knight from a distant land, a scion of a noble house visiting Sunmarch for one reason or another."))
 		var/helmets = list(
 			"Pigface Bascinet" 	= /obj/item/clothing/head/roguetown/helmet/bascinet/pigface,
 			"Guard Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/guard,

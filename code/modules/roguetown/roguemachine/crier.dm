@@ -4,7 +4,7 @@
 
 /obj/structure/roguemachine/crier
 	name = "rousmaster"
-	desc = "A magitech device intended for the Town Crier's golden tone. In addition to functioning like an improved SCOM, it can also manage Azuria's own network of SCOMlines and streetpipes."
+	desc = "A magitech device intended for the Town Crier's golden tone. In addition to functioning like an improved SCOM, it can also manage Sunmarch's own network of SCOMlines and streetpipes."
 	icon = 'icons/roguetown/misc/structure.dmi'
 	icon_state = "crier_machine"
 	density = TRUE

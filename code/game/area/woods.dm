@@ -1,7 +1,7 @@
 // Azure Grove - the areas to the south of the map
 
 /area/rogue/outdoors/woods
-	name = "The Azure Grove"
+	name = "The Sunmarch Grove"
 	icon_state = "woods"
 	ambientsounds = AMB_FORESTDAY
 	ambientnight = AMB_FORESTNIGHT
@@ -21,7 +21,7 @@
 				/mob/living/carbon/human/species/goblin/npc/ambush = 30,
 				/mob/living/carbon/human/species/human/northern/militia/deserter = 20,
 				/mob/living/carbon/human/species/human/northern/highwayman/ambush = 10)
-	first_time_text = "THE AZURE GROVE"
+	first_time_text = "THE SUNMARCH GROVE"
 	converted_type = /area/rogue/indoors/shelter/woods
 	deathsight_message = "somewhere in the wilds"
 	threat_region = THREAT_REGION_AZURE_GROVE
