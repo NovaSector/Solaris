@@ -1,4 +1,4 @@
-#define COOLDOWN_NO_DISPLAY_TIME (180 SECONDS)
+#define COOLDOWN_NO_DISPLAY_TIME (10 MINUTES)
 
 /// Preset for an action that has a cooldown.
 /datum/action/cooldown
@@ -160,11 +160,21 @@
 	if(cooldown_time > 1 MINUTES)
 		return
 
-	// Another spell is been selected or another click intercept is active
-	if(owner.click_intercept)
+	// Another spell has been selected or another click intercept is active
+	if(owner.click_intercept && owner.click_intercept != src)
+		return
+
+	// Already selected - just re-activate input handling without toggling
+	if(owner.click_intercept == src)
+		on_retrigger_reselect()
 		return
 
 	Trigger()
+
+/// Called by retrigger when the spell is already selected but needs input re-registered.
+/// Override in subtypes that need to restore signal handlers after a cast.
+/datum/action/cooldown/proc/on_retrigger_reselect()
+	return
 
 /// Cancel retriggering by removing the timer
 /datum/action/cooldown/proc/cancel_retrigger()
@@ -215,8 +225,8 @@
 
 	// If our cooldown action is not a click_to_activate action:
 	// We can just continue on and use the action
-	// the target is the user of the action (often, the owner)
-	return PreActivate(user)
+	// the target is the user of the action (often, the owner) unless explicitly passed
+	return PreActivate(target || user)
 
 /// Intercepts client owner clicks to activate the ability
 /datum/action/cooldown/proc/InterceptClickOn(mob/living/clicker, list/modifiers, atom/target)
@@ -276,6 +286,7 @@
 	SHOULD_CALL_PARENT(TRUE)
 
 	on_who.click_intercept = null
+	cancel_retrigger()
 	if(ranged_mousepointer)
 		on_who.client?.mouse_pointer_icon = initial(on_who.client?.mouse_pointer_icon)
 		on_who.update_mouse_pointer()

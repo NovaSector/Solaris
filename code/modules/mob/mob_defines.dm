@@ -169,7 +169,7 @@
 	var/advjob = null
 
 	/// A list of factions that this mob is currently in, for hostile mob targetting, amongst other things
-	var/list/faction = list("neutral")
+	var/list/faction = list(FACTION_NEUTRAL)
 
 	/// The current client inhabiting this mob. Managed by login/logout
 	/// This exists so we can do cleanup in logout for occasions where a client was transfere rather then destroyed
@@ -223,6 +223,10 @@
 	///Allows a datum to intercept all click calls this mob is the source of
 	var/datum/click_intercept
 
+	///Currently-channeling spell_cooldown datum, set by on_start_charge() and cleared by end_charging().
+	///Cached so checkdefense() can block parry without iterating /actions on every incoming swing.
+	var/datum/action/cooldown/spell/channeling_spell
+
 	///For storing what do_after's someone has, key = string, value = amount of interactions of that type happening.
 	var/list/do_afters
 
@@ -273,7 +277,9 @@
 	var/dodgecd = FALSE
 
 	var/setparrytime = 12
-	var/dodgetime = 12
+	var/dodgetime = 0
+	var/max_dodge = MAX_DODGE_CEIL
+	var/parrydelay = 12
 	var/magearmor = 0
 
 	var/last_dodge = 0
@@ -318,6 +324,7 @@
 	var/last_client_interact = 0
 
 	var/datum/weakref/offered_item_ref
+
 
 	/// cooldown for the next time this person can offer
 	COOLDOWN_DECLARE(offer_cooldown)
