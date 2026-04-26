@@ -1,5 +1,5 @@
 GLOBAL_LIST_INIT(bounty_posters, list(
-	"SUNMARCH" = "The Justiciary of Sunmarch",
+	"AZURIA" = "The Justiciary of Azuria",
 	"GRENZELHOFT" = "The Grenzelhoftian Holy See",
 	"OTAVAN" = "The Otavan Orthodoxy"
 ))
@@ -13,7 +13,7 @@ GLOBAL_LIST_INIT(wretch_severities, list(
 GLOBAL_LIST_INIT(bandit_severities, list(
 	"FISH" = "Small Fish",
 	"BUTCHER" = "Bay Butcher",
-	"BOOGEYMAN" = "Sunmarcher Boogeyman"
+	"BOOGEYMAN" = "Azurean Boogeyman"
 ))
 
 GLOBAL_LIST_INIT(wretch_bounty_severities, list(
@@ -46,7 +46,7 @@ GLOBAL_LIST_INIT(bandit_bounty_severities, list(
 		"max" = 500
 	),
 	"BOOGEYMAN" = list(
-		"name" = "Sunmarcher Boogeyman",
+		"name" = "Azurean Boogeyman",
 		"min" = 500,
 		"max" = 600
 	)
