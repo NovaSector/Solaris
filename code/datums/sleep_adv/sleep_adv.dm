@@ -72,12 +72,38 @@
 
 /datum/sleep_adv/proc/add_sleep_experience(skill, amt, silent = FALSE, _show_xp = TRUE)
 	var/mob/living/L = mind.current
+	var/datum/skill/sleep_gate = GetSkillRef(skill)
+	if(sleep_gate && !sleep_gate.learnable_in_sleep)
+		return
 	var/show_xp = _show_xp
 	if(!(L.client?.prefs.combat_toggles & XP_TEXT))
 		show_xp = FALSE
 	if((L.get_skill_level(skill) < SKILL_LEVEL_APPRENTICE) && (!is_considered_sleeping()|| HAS_TRAIT(mind.current, TRAIT_VAMP_DREAMS)))
+		// Check skill cap even below apprentice (e.g. alchemy with max_untraited_level = SKILL_LEVEL_NONE)
+		var/datum/skill/pre_skillref = GetSkillRef(skill)
+		var/pre_cap = pre_skillref.max_untraited_level
+		#ifdef USES_TRAIT_SKILL_GATING
+		for(var/trait in pre_skillref.trait_uncap)
+			if(HAS_TRAIT(mind.current, trait) && (pre_skillref.trait_uncap[trait] > pre_cap))
+				pre_cap = pre_skillref.trait_uncap[trait]
+		#endif
+		#ifndef USES_TRAIT_SKILL_GATING
+		pre_cap = SKILL_LEVEL_LEGENDARY
+		#endif
+		if(pre_cap < SKILL_LEVEL_APPRENTICE && L.get_skill_level(skill) >= pre_cap)
+			var/skillname = pre_skillref.name ? pre_skillref.name : "ERROR"
+			var/captimer = LAZYACCESS(L.mob_timers, "skillcap_[skillname]")
+			if(!captimer || world.time > (captimer + SKILLCAP_NOTIF_COOLDOWN))
+				L.mob_timers["skillcap_[skillname]"] = world.time
+				to_chat(L, span_warning("I can't learn anything more about [skillname]."))
+				if(show_xp)
+					L.balloon_alert(L, "<font color = '#bb2b2b'>Skill cap!</font>")
+			return
 		var/org_lvl = L.get_skill_level(skill)
 		L.adjust_experience(skill, amt)
+		// Clamp level to cap if XP pushed us past it (e.g. cap at Novice, XP jumped us to Apprentice)
+		if(pre_cap < SKILL_LEVEL_APPRENTICE && L.get_skill_level(skill) > pre_cap)
+			L.adjust_skillrank_down_to(skill, pre_cap, TRUE)
 		var/new_lvl = L.get_skill_level(skill)
 		var/capped_post_check = enough_sleep_xp_to_advance(skill, 2)
 		if(COOLDOWN_FINISHED(src, xp_show))
@@ -277,6 +303,9 @@
 		return
 	if(!enough_sleep_xp_to_advance(skill_type, 1))
 		return
+	var/datum/skill/bought_skill = GetSkillRef(skill_type)
+	if(bought_skill && !bought_skill.learnable_in_sleep)
+		return
 	if(HAS_TRAIT(mind.current, TRAIT_CURSE_MALUM))
 		to_chat(mind.current, span_warning("My dreams turn to nitemares."))
 		return
@@ -300,6 +329,8 @@
 	for(var/skill_type in SSskills.all_skills)
 		var/datum/skill/skill = GetSkillRef(skill_type)
 		if(!skill.randomable_dream_xp)
+			continue
+		if(!skill.learnable_in_sleep)
 			continue
 		if(enough_sleep_xp_to_advance(skill_type, 1))
 			continue
@@ -349,6 +380,9 @@
 	if(HAS_TRAIT(mind.current, TRAIT_EXPLOSIVE_SUPPLY))
 		mind.has_bomb = TRUE
 		to_chat(mind.current, span_smallnotice("I need to check on HERMES. I think a new package has arrived."))
+	if(HAS_TRAIT(mind.current, TRAIT_DRUG_SUPPLY))
+		mind.has_drug_delivery = TRUE
+		to_chat(mind.current, span_smallnotice("The Guild left something for me. I should check HERMES for my delivery."))
 	close_ui()
 
 /datum/sleep_adv/Topic(href, list/href_list)

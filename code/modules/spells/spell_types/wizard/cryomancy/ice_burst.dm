@@ -6,7 +6,7 @@
 	name = "Ice Burst"
 	desc = "Launch a burst of frozen energy that shatters on impact, freezing and burning all nearby targets in a small area. \
 	Applies one stack of frost to all targets in the blast radius. \
-	Toggle arc mode (Ctrl+G) while the spell is active to fire it over intervening mobs. Arced attacks deal 25% less damage."
+	Toggle arc mode (Shift+G) while the spell is active to fire it over intervening mobs. Arced attacks deal 25% less damage."
 	button_icon_state = "ice_burst"
 	sound = 'sound/spellbooks/crystal.ogg'
 	spell_color = GLOW_COLOR_ICE
@@ -28,7 +28,7 @@
 	charge_required = TRUE
 	weapon_cast_penalized = TRUE
 	charge_time = CHARGETIME_MAJOR
-	charge_drain = 1
+	hold_drain = 1
 	charge_slowdown = CHARGING_SLOWDOWN_MEDIUM
 	charge_sound = 'sound/magic/charging.ogg'
 	cooldown_time = 16 SECONDS
@@ -43,7 +43,7 @@
 	icon = 'icons/obj/projectiles.dmi'
 	icon_state = "wipe"
 	speed = MAGE_PROJ_VERY_SLOW
-	damage = 55
+	damage = 50
 	damage_type = BURN
 	woundclass = BCLASS_BURN
 	npc_simple_damage_mult = 2.5
@@ -58,7 +58,7 @@
 
 /obj/projectile/magic/ice_burst/arc
 	name = "arced ice burst"
-	damage = 41
+	damage = 37
 	arcshot = TRUE
 
 /obj/projectile/magic/ice_burst/on_hit(target)
@@ -70,6 +70,9 @@
 		playsound(get_turf(target), 'sound/magic/magic_nulled.ogg', 100)
 		qdel(src)
 		return BULLET_ACT_BLOCK
+
+	if(out_of_effective_range())
+		return
 
 	var/aoe_damage = round(damage * aoe_damage_ratio)
 	var/turf/epicenter = get_turf(target)

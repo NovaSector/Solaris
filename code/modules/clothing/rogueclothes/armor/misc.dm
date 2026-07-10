@@ -4,7 +4,6 @@
 	name = "corset"
 	desc = "A leather binding to constrict one's figure... and lungs."
 	icon_state = "corset"
-	armor_class = ARMOR_CLASS_LIGHT
 	body_parts_covered = CHEST
 	salvage_result = /obj/item/natural/hide/cured
 	sewrepair = TRUE
@@ -39,7 +38,6 @@
 	icon_state = "workervest"
 	armor = null
 	blocksound = SOFTHIT
-	blade_dulling = DULLING_BASHCHOP
 	body_parts_covered = COVERAGE_VEST
 	break_sound = 'sound/foley/cloth_rip.ogg'
 	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
@@ -61,7 +59,6 @@
 	armor = ARMOR_LEATHER
 	blocksound = SOFTHIT
 	slot_flags = ITEM_SLOT_ARMOR
-	blade_dulling = DULLING_BASHCHOP
 	body_parts_covered = COVERAGE_ALL_BUT_HANDFEET
 	break_sound = 'sound/foley/cloth_rip.ogg'
 	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
@@ -69,7 +66,6 @@
 	sleeved = 'icons/roguetown/clothing/onmob/helpers/sleeves_armor.dmi'
 	sleevetype = "shirt"
 	max_integrity = ARMOR_INT_CHEST_CIVILIAN
-	sellprice = 50
 	armor_class = ARMOR_CLASS_LIGHT
 	allowed_sex = list(MALE, FEMALE)
 	allowed_race = CLOTHED_RACES_TYPES

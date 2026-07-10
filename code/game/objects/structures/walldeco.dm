@@ -543,7 +543,7 @@
 		if(HU.anti_magic_check()) //are we shielded?
 			return
 
-		if(!(HU in SStreasury.bank_accounts)) //first off- do we not have an account? we'll ALWAYS scream if that's the case
+		if(!SStreasury.has_account(HU)) //first off- do we not have an account? we'll ALWAYS scream if that's the case
 			playsound(loc, 'sound/misc/gold_license.ogg', 100, TRUE, -1)
 			say("INTRUS! ARRESTEZ-VOUS! GARDES! GARDES! MAROUFLE A MORTIR!!")
 			next_yap = world.time + 6 SECONDS
@@ -561,19 +561,19 @@
 			next_yap = world.time + 30 SECONDS
 			return
 
-		if((user.job in GLOB.burgher_positions) || (user.job in GLOB.garrison_positions) || (user.job in GLOB.church_positions)) //Cityfolk and Garrison and Church
+		if((user.job in GLOB.burgher_positions) || (user.job in GLOB.garrison_positions) || (user.job in GLOB.church_positions) || (user.job == "Merchant")) //Cityfolk and Garrison and Church
 			say("Salutations, [user.real_name]. Thirty-breths silence period active por votre grace.")
 			playsound(loc, 'sound/misc/gold_menu.ogg', 100, TRUE, -1)
 			next_yap = world.time + 30 SECONDS
 			return
 
-		if((user.job in GLOB.peasant_positions) || (user.job in GLOB.sidefolk_positions) || (user.job in GLOB.inquisition_positions)) //Peasants and unimportant people to the crown.
+		if((user.job in GLOB.peasant_positions) || (user.job in GLOB.sidefolk_positions) || (user.job in GLOB.inquisition_positions) || (user.job == "Shophand")) //Peasants and unimportant people to the crown.
 			say("Salutations, [user.real_name]. I can spare some time por votre gueuserie.")
 			playsound(loc, 'sound/misc/gold_menu.ogg', 100, TRUE, -1)
 			next_yap = world.time + 30 SECONDS
 			return
 
-		if((HU in SStreasury.bank_accounts)) //Anyone else
+		if(SStreasury.has_account(HU)) //Anyone else
 			playsound(loc, 'sound/misc/gold_menu.ogg', 100, TRUE, -1)
 			say("[user.real_name] logged entering zone securisee.")
 			return

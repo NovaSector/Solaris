@@ -119,18 +119,13 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 
 /obj/item/matthios_canister/lyfestruth
 	name = "vial of lyfestruth base"
-	desc = "Within the glass swells a searing draught, as though molten gold were stirred with the heartblood of a volcano. It glows too bright, too alive. The vessel ought crack, yet it does not. What is this impossible sorcery?"
-	current_color = "#ffffff"	
+	desc = "Within the glass swells a searing draught, as though molten gold were stirred with the heartblood of a volcano."
+	current_color = "#ffffff"
 	result_path = /obj/item/alchserum/matthios_lyfestruth
-	var/has_lux = FALSE
-	var/lux_types = list(
-		/obj/item/reagent_containers/lux,
-		/obj/item/reagent_containers/lux_impure,
-		/obj/item/reagent_containers/lux_moss,
-		/obj/item/leechtick_bloated,
-
-	)
-	required_ingredients = list(
+	// ROUTE STATE
+	var/route = null // "herb", "coin", "lux"
+	// ROUTE 1 - HERBS
+	var/list/required_herbs = list(
 		/obj/item/alch/atropa,
 		/obj/item/alch/matricaria,
 		/obj/item/alch/symphitum,
@@ -146,134 +141,255 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 		/obj/item/alch/valeriana,
 		/obj/item/alch/artemisia,
 		/obj/item/reagent_containers/food/snacks/grown/manabloom,
-		/obj/item/alch/rosa,
+		/obj/item/alch/rosa
 	)
-	ingredient_colors = list(
-		/obj/item/alch/atropa = "#8b37c4",
-		/obj/item/alch/matricaria = "#f5e6a8",
-		/obj/item/alch/symphitum = "#4f8f6a",
-		/obj/item/alch/taraxacum = "#ffd84d",
-		/obj/item/alch/euphrasia = "#cfe8ff",
-		/obj/item/alch/paris = "#62a044",
-		/obj/item/alch/calendula = "#ff9f1a",
-		/obj/item/alch/mentha = "#3aff7a",
-		/obj/item/alch/urtica = "#2f7f3f",
-		/obj/item/alch/salvia = "#6b8e23",
-		/obj/item/alch/hypericum = "#ffcc33",
-		/obj/item/alch/benedictus = "#d4b24c",
-		/obj/item/alch/valeriana = "#8e5a3c",
-		/obj/item/alch/artemisia = "#7a9e7e",
-		/obj/item/reagent_containers/food/snacks/grown/manabloom = "#66ccff",
-		/obj/item/alch/rosa = "#ff4d6d"
-	)
-
-	result_path = /obj/item/alchserum/matthios_lyfestruth
+	var/blood_uses = 0
+	var/max_blood_uses = 5
+	// ROUTE 2 - COIN
+	var/coin_value = 0
+	var/coin_target = 500
+	// ROUTE 3 - LUX
+	var/lux_count = 0
+	var/impure_lux_count = 0
+	var/lux_blood = 0
 
 /obj/item/matthios_canister/lyfestruth/Initialize()
 	. = ..()
-	required_ingredients = required_ingredients.Copy()
+	required_herbs = required_herbs.Copy()
 
 /obj/item/matthios_canister/lyfestruth/freeman_progress(mob/user)
-	if(!required_ingredients.len && !has_lux)
-		return "The draught is complete. You can feel the heat, but it lacks the life essence to stabilize it."
+	// NO ROUTE YET
+	if(!route)
+		return "The draught is unstable... it may yet accept herbs, mammon, or Lux."
 
-	var/typepath = pick(required_ingredients)
-	var/atom/A = typepath
-	var/initial_name = initial(A.name)
+	// ROUTE 1 — HERBS
+	if(route == "herb")
+		var/herb_hint = "none"
+		if(required_herbs.len)
+			var/typepath = pick(required_herbs)
+			var/atom/A = typepath
+			herb_hint = initial(A.name)
 
-	if(has_lux)
-		return "It lacks [initial_name], but gold dust may also serve. Lux has been bound, speeding the process. ([required_ingredients.len] components yet unbound)"
+		var/remaining_blood = max(0, max_blood_uses - blood_uses)
 
-	return "It lacks [initial_name], but gold dust may also serve. ([required_ingredients.len] components yet unbound)"
+		return "It still lacks [herb_hint]. Blood may substitute the missing pieces. ([remaining_blood]/[max_blood_uses] sacrifices remaining)"
 
+	// ROUTE 2 — COIN
+	if(route == "coin")
+		return "Mammon bound: [coin_value]/[coin_target]. The draught demands wealth made manifest."
 
-/obj/item/matthios_canister/lyfestruth/freeman_truth()
-	return "This is no vulgar tonic, but 'Geald', the stolen fyre of Astrata condensed into liquid form. Oft called 'liquid anastasis', it restores not flesh, but the moment before death was writ. However, it is a fact of its volatile nature."
+	// ROUTE 3 — LUX
+	if(route == "lux")
+		if(lux_count >= 1)
+			return "The purified Lux is bound. The draught stabilizes..."
 
-/obj/item/matthios_canister/lyfestruth/attackby(obj/item/I, mob/user)
-	. = ..()
-	if(!I)
-		return 
+		var/needed_impure = max(0, 2 - impure_lux_count)
+		var/needed_blood = max(0, 5 - lux_blood)
 
-	var/is_gold = istype(I, /obj/item/alch/golddust)
-	var/is_lux = FALSE
+		return "The draught writhes incomplete... [needed_impure] more impure Lux required, and [needed_blood]/5 lyfeblood or heartblood sacrifices remain."
 
-	for(var/L in lux_types)
-		if(istype(I, L))
-			is_lux = TRUE
-			break
+	return "The draught resists interpretation. It may require a herb, coin or any lux..."
 
-	var/is_valid = FALSE
-	for(var/T in required_ingredients)
-		if(istype(I, T))
-			is_valid = TRUE
-			break
+/obj/item/matthios_canister/lyfestruth/proc/set_route(new_route, mob/user)
+	if(route && route != new_route)
+		to_chat(user, span_warning("The brew resists. Its path is already set."))
+		return FALSE
 
-	if(!is_valid && !is_gold && !is_lux)
-		return
+	if(!route)
+		route = new_route
 
-	if(do_after(user, 2 SECONDS))
-
-		if(is_lux)
-			if(has_lux)
-				to_chat(user, span_warning("The vessel recoils—too much Lux would surely rupture it."))
-				return
-
-			has_lux = TRUE
-			current_color = "#66ccff"
-
-			var/remove_count = max(1, round(required_ingredients.len * 0.5))
-			for(var/i = 1, i <= remove_count, i++)
-				if(!required_ingredients.len)
-					break
-				var/chosen = pick(required_ingredients)
-				required_ingredients -= chosen
-
-			to_chat(user, span_notice("The mixture surges! Its progress hastened considerably by the life essence!"))
-
-			qdel(I)
-			playsound(user, 'sound/misc/lava_death.ogg', 15, FALSE)
-			update_icon()
-			check_completion(user)
-			return
-
-		if(is_gold)
-			if(!required_ingredients.len)
-				return
-
-			var/chosen = pick(required_ingredients)
-			required_ingredients -= chosen
-			current_color = "#fff066"
-
-			qdel(I)
-			playsound(user, 'sound/misc/lava_death.ogg', 15, FALSE)
-			update_icon()
-			check_completion(user)
-			return
-
-		if(!(I.type in required_ingredients))
-			to_chat(user, span_warning("That essence has already been bound."))
-			return
-
-		required_ingredients -= I.type
-
-		if(ingredient_colors[I.type])
-			current_color = ingredient_colors[I.type]
-
-		qdel(I)
-		playsound(user, pick(da_bubbles), 30, FALSE)
-		update_icon()
-		check_completion(user)
-
-	return
+	return TRUE
 
 /obj/item/matthios_canister/lyfestruth/check_completion(mob/user)
-	if(!required_ingredients.len && !has_lux)
-		to_chat(user, span_warning("The mixture writhes… yet something radiant and vital is still missing..."))
+	// ROUTE 1
+	if(route == "herb")
+		if(!required_herbs.len)
+			alch_transform(user)
+			return TRUE
+	// ROUTE 2
+	if(route == "coin")
+		if(coin_value >= coin_target)
+			alch_transform(user)
+			return TRUE
+	// ROUTE 3
+	if(route == "lux")
+		if(lux_count >= 1)
+			if(impure_lux_count)
+				new /obj/item/reagent_containers/lux_impure(user.loc)
+			alch_transform(user)
+			return TRUE
+		if(impure_lux_count >= 2 && lux_blood >= 5)
+			alch_transform(user)
+			return TRUE
+
+	return FALSE
+
+/obj/item/matthios_canister/lyfestruth/attackby(obj/item/I, mob/user)
+	if(!I)
 		return
 
-	if(!required_ingredients.len && has_lux)
-		alch_transform(user)
+	// ROUTE 1 - HERBS
+	for(var/T in required_herbs)
+		if(istype(I, T))
+			if(!set_route("herb", user))
+				to_chat(user, span_notice("This will no longer work with the draught..."))
+				return
+			if(!do_after(user, 1 SECONDS))
+				return
+			required_herbs -= T
+			qdel(I)
+
+			to_chat(user, span_notice("The herb binds into the draught. ([required_herbs.len] remaining)"))
+			check_completion(user)
+			return
+
+	// ROUTE 2 - COINS
+	if(istype(I, /obj/item/roguecoin))
+		if(!set_route("coin", user))
+			to_chat(user, span_notice("This will no longer work with the draught..."))
+			return
+		if(!do_after(user, 1 SECONDS))
+			return
+		var/obj/item/roguecoin/C = I
+		var/value = C.get_real_price()
+		if(value <= 0)
+			return
+		coin_value += value
+		qdel(I)
+		to_chat(user, span_notice("The mammon dissolves into the draught... ([coin_value]/[coin_target])"))
+		check_completion(user)
+		return
+
+	// ROUTE 3 - LUX
+	if(istype(I, /obj/item/reagent_containers/lux)||istype(I, /obj/item/reagent_containers/lux_moss))
+		if(!set_route("lux", user))
+			to_chat(user, span_notice("This will no longer work with the draught..."))
+			return
+		if(!do_after(user, 1 SECONDS))
+			return
+		lux_count++
+		qdel(I)
+
+		to_chat(user, span_notice("The purified Lux binds perfectly into the mixture, sizzling with a golden glow..."))
+		check_completion(user)
+		return
+
+	if(istype(I, /obj/item/reagent_containers/lux_impure))
+		if(!set_route("lux", user))
+			to_chat(user, span_notice("This will no longer work with the draught..."))
+			return
+		if(!do_after(user, 1 SECONDS))
+			return
+		impure_lux_count++
+		qdel(I)
+
+		to_chat(user, span_notice("The impure Lux writhes within the draught. It demands more..."))
+		check_completion(user)
+		return
+
+	if(istype(I, /obj/item/heart_blood_canister/filled))
+		if(!set_route("lux", user))
+			to_chat(user, span_notice("This will no longer work with the draught..."))
+			return
+		if(lux_blood <= 5)
+			to_chat(user, span_notice("This is brimming with vitae, it needs no more."))
+			return
+		if(!do_after(user, 1 SECONDS))
+			return
+		lux_blood = 5
+		qdel(I)
+
+		to_chat(user, span_notice("The heartblood boils within the draught. It demands no more."))
+		check_completion(user)
+		return
+
+	if(istype(I, /obj/item/heart_blood_canister/filled))
+		if(!set_route("lux", user))
+			to_chat(user, span_notice("This will no longer work with the draught..."))
+			return
+		if(lux_blood <= 5)
+			to_chat(user, span_notice("This is brimming with vitae, it needs no more."))
+			return
+		if(!do_after(user, 1 SECONDS))
+			return
+		lux_blood = 5
+		qdel(I)
+
+		to_chat(user, span_notice("The heartblood boils within the draught. It demands more..."))
+		check_completion(user)
+		return
+
+/obj/item/matthios_canister/lyfestruth/afterattack(atom/target, mob/user, proximity_flag, params)
+	if(!proximity_flag)
+		return
+
+	if(!HAS_TRAIT(user, TRAIT_MATTHIOS_EYES))
+		return
+
+	// ROUTE 1 - HERB BLOODPRICE
+	if(route == "herb" || !route)
+		if(ishuman(target))
+			var/mob/living/carbon/human/H = target
+
+			if(blood_uses >= max_blood_uses)
+				to_chat(user, span_warning("The draught refuses further sacrifice."))
+				return
+
+			if(!H.get_bleed_rate())
+				to_chat(user, span_warning("There is no open wound to draw from."))
+				return
+
+			if(!set_route("herb", user))
+				return
+
+			if(do_after(user, 2 SECONDS, target = H))
+				var/drain_amt = round(BLOOD_VOLUME_NORMAL * 0.05)
+				H.blood_volume -= drain_amt
+
+				blood_uses++
+
+				if(required_herbs.len)
+					var/chosen = pick(required_herbs)
+					required_herbs -= chosen
+
+				to_chat(user, span_warning("The draught drinks deeply... ([blood_uses]/[max_blood_uses])"))
+
+				if(user == H)
+					H.visible_message(span_danger("[user] presses the vial to their own wound, feeding it."))
+				else
+					H.visible_message(span_danger("[user] presses the vial to [H]'s wound, drawing blood."))
+
+				check_completion(user)
+			return
+
+	// ROUTE 3 - IMPURE LUX BLOODPRICE
+	if(route == "lux" && impure_lux_count >= 1)
+		if(ishuman(target))
+			var/mob/living/carbon/human/H = target
+
+			if(lux_blood >= 5)
+				to_chat(user, span_warning("The draught has taken enough."))
+				return
+
+			if(!H.get_bleed_rate())
+				to_chat(user, span_warning("There is no blood to take."))
+				return
+
+			if(do_after(user, 2 SECONDS, target = H))
+				var/drain_amt = round(BLOOD_VOLUME_NORMAL * 0.05)
+				H.blood_volume -= drain_amt
+
+				lux_blood++
+
+				to_chat(user, span_warning("The impure Lux within writhes as it feeds... ([lux_blood]/5)"))
+
+				if(user == H)
+					H.visible_message(span_danger("[user] feeds their own blood into the unstable draught."))
+				else
+					H.visible_message(span_danger("[user] draws blood from [H] into the unstable mixture."))
+
+				check_completion(user)
+			return
 
 /obj/item/alchserum/matthios_lyfestruth
 	name = "vial of lyfestruth"
@@ -283,6 +399,7 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 	current_color = "#ff9d00"
 	aura_color = "#fffaad"
 	w_class = WEIGHT_CLASS_TINY
+
 
 /obj/item/alchserum/matthios_lyfestruth/attack(mob/living/target, mob/user)
 	if(!istype(target, /mob/living/carbon))
@@ -295,9 +412,6 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 		return
 	if(HAS_TRAIT(target, TRAIT_DNR))
 		to_chat(user, span_danger("The Geald within the vial does not react to them at all. Strange."))
-		return	
-	if(HAS_TRAIT(target, TRAIT_NOBLE))
-		to_chat(user, span_notice("You have a feeling that Matthios would personally eviscerate you for trying this on them."))
 		return
 
 	to_chat(user, span_notice("You begin pouring the lyfestruth over [target.name]..."))
@@ -325,7 +439,7 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 		target.visible_message(span_warning("[target.name]'s body rewinds to life... only for a massive shockwave of fire to burst from them!"))
 		target.adjust_fire_stacks(5)
 		target.ignite_mob()
-		target.emote("agony", forced = TRUE)
+		target.emote("superagony", forced = TRUE)
 	else
 		to_chat(target, span_warning("You refuse the call... but the warmth curdles into something volatile."))
 		target.visible_message(span_warning("[target.name] does not rise. The Geald within them destabilizes violently!"))
@@ -354,24 +468,7 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 	desc = "A suffocating pressure coils within the glass, as though something immense has been forced into too small a space. The contents do not slosh nor settle. They weigh upon reality itself."
 	current_color = "#e100ff"
 	aura_color = "#ff00b3"
-
 	var/stored_value = 0
-
-	required_ingredients = list(
-		/obj/item/natural/dirtclod,
-		/obj/item/natural/clay,
-		/obj/item/natural/stone,
-		/obj/item/rogueore/coal,
-		/obj/item/rogueore/iron,
-		/obj/item/rogueore/gold,
-		/obj/item/roguegem/yellow,
-		/obj/item/roguegem/green,
-		/obj/item/roguegem/violet,
-		/obj/item/roguegem/blue,
-		/obj/item/roguegem/diamond,
-		/obj/item/riddleofsteel,
-		/obj/item/roguecoin,
-	)
 
 /obj/item/matthios_canister/firstlaw/freeman_truth()
 	return "All things bend to the First Law. Nothing is created. Nothing is lost. Value merely changes shape. Where distant alchemists ever sought the truth to turn stone into gold, Malchem at its prime casually achieved. That old truth still lingers within this blessed vial, weakened."
@@ -379,73 +476,52 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 /obj/item/matthios_canister/firstlaw/freeman_progress(mob/user)
 	return "Stored Value: [stored_value]"
 
+// VALIDATION
 /obj/item/matthios_canister/firstlaw/proc/get_value(obj/item/I)
 	if(istype(I, /obj/item/roguecoin))
 		var/obj/item/roguecoin/C = I
 		return C.get_real_price()
 
-	if(istype(I, /obj/item/natural/dirtclod))		return 1
-	if(istype(I, /obj/item/natural/clay))			return 1
-	if(istype(I, /obj/item/natural/stone))			return 1
-	if(istype(I, /obj/item/rogueore/coal))			return 2
-	if(istype(I, /obj/item/rogueore/iron))			return 5
-	if(istype(I, /obj/item/rogueore/gold))			return 10
-	if(istype(I, /obj/item/roguegem/yellow))		return 56
-	if(istype(I, /obj/item/roguegem/green))			return 88
-	if(istype(I, /obj/item/roguegem/violet))		return 100
-	if(istype(I, /obj/item/roguegem/blue))			return 34
-	if(istype(I, /obj/item/roguegem/diamond))		return 121
-	if(istype(I, /obj/item/riddleofsteel))			return 400
+	if(istype(I, /obj/item/natural/stone) || istype(I, /obj/item/natural/clay) || istype(I, /obj/item/natural/dirtclod) || istype(I, /obj/item/natural/glass_shard))
+		return 1
+
+	if(istype(I, (/obj/item/natural/rock)))
+		return 4
+
+	if(istype(I, (/obj/item/scrap) || istype(I, /obj/item/natural/glass)))
+		return 10
+
+	if(istype(I, /obj/item/rogueore))
+		var/obj/item/rogueore/O = I
+		return O.sellprice
+
+	if(istype(I, /obj/item/roguegem))
+		var/obj/item/roguegem/G = I
+		return G.sellprice
+
+	if(istype(I, /obj/item/riddleofsteel))
+		var/obj/item/riddleofsteel/R = I
+		return R.sellprice
+
 	return 0
 
-/obj/item/matthios_canister/firstlaw/proc/add_value(amount, mob/user)
-	if(amount <= 0)
-		return
-
-	stored_value += amount
-
-	if(user)
-		to_chat(user, span_warning("The contents compress into entropic dust... <br>(Current Value: [stored_value])"))
-
-	update_icon()
-
-/obj/item/matthios_canister/firstlaw/proc/remove_value(amount, mob/user)
-	if(amount <= 0)
-		return
-
-	stored_value -= amount
-
-	if(user)
-		to_chat(user, span_warning("The entropic dust disappears... <br>(Current Value: [stored_value])"))
-
-	update_icon()
-
+// MAIN ITEM INTERACTION
 /obj/item/matthios_canister/firstlaw/attackby(obj/item/I, mob/user)
 	if(!HAS_TRAIT(user, TRAIT_MATTHIOS_EYES))
 		to_chat(user, span_warning("The principle behind this vial escapes me. This is nonsense and heresy!"))
 		return TRUE
 
-	var/valid = FALSE
-
-	if(istype(I, /obj/item/roguecoin))
-		valid = TRUE
-	else
-		for(var/T in required_ingredients)
-			if(istype(I, T))
-				valid = TRUE
-				break
-
-	if(!valid)
-		return TRUE
-
-	if(!do_after(user, 1 SECONDS))
-		return TRUE
-
 	var/value = get_value(I)
+
 	if(value <= 0)
+		to_chat(user, span_warning("This is worthless."))
 		return TRUE
 
-	add_value(value, user)
+	if(!do_after(user, 0.75 SECONDS, target = user))
+		return TRUE
+
+	stored_value += value
+	to_chat(user, span_warning("The contents compress into entropic dust... <br>(Current Value: [stored_value])"))
 
 	playsound(user.loc, 'sound/misc/smelter_sound.ogg', 50, FALSE)
 	qdel(I)
@@ -454,65 +530,82 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 /obj/item/matthios_canister/firstlaw/proc/process_stone_batch(mob/user, turf/T)
 	var/level = user.get_skill_level(/datum/skill/magic/holy)
 	var/batch_size = 2 + (level * 2)
-
-	var/processed_any = FALSE
+	var/processed = 0
 
 	while(TRUE)
 		var/list/batch = list()
 
-		for(var/obj/item/natural/stone/S in T)
-			batch += S
+		// Build batch safely
+		for(var/obj/item/I in T)
+			if((istype(I, /obj/item/natural/stone) || istype(I, /obj/item/natural/clay) || istype(I, /obj/item/natural/glass_shard) || istype(I, /obj/item/natural/rock)))
+				var/value = get_value(I)
+				if(value > 0)
+					batch += I
+
 			if(batch.len >= batch_size)
 				break
 
+		// Nothing valid found → stop entirely
 		if(!batch.len)
 			break
 
+		// Action delay
 		if(!do_after(user, 1 SECONDS, target = user))
 			break
 
-		for(var/obj/item/natural/stone/S in batch)
-			if(QDELETED(S))
+		// Process batch
+		for(var/obj/item/I in batch)
+			if(QDELETED(I))
 				continue
 
-			qdel(S)
-			stored_value++
-			processed_any = TRUE
+			var/value = get_value(I)
+			if(value <= 0)
+				continue
+
+			stored_value += value
+			qdel(I)
+			processed++
 
 		playsound(user.loc, 'sound/misc/smelter_sound.ogg', 25, FALSE)
 
-	if(processed_any)
-		to_chat(user, span_warning("You gather the stones together, reducing them into entropic dust.<br>(Current Value: [stored_value])"))
-		update_icon()
+	// Final feedback
+	if(processed > 0)
+		to_chat(user, span_warning("You gather the materials together, reducing them into entropic dust.<br>(Current Value: [stored_value])"))
 
-	return processed_any
+	return processed > 0
 
 /obj/item/matthios_canister/firstlaw/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if(!proximity_flag)
-		return
-	if(!HAS_TRAIT(user, TRAIT_MATTHIOS_EYES))
+	if(!proximity_flag || !HAS_TRAIT(user, TRAIT_MATTHIOS_EYES))
 		return
 
-	if(istype(target, /obj/item/natural/stone))
-		var/obj/item/natural/stone/S = target
-		if(do_after(user, 0.5 SECONDS, target = user))
-			qdel(S)
-			add_value(1, user)
-			playsound(user.loc, 'sound/misc/smelter_sound.ogg', 25, FALSE)
-		return
+	if(isitem(target))
+		var/obj/item/I = target
+		var/value = get_value(I)
 
-	if(istype(target, /obj/item/natural/rock))
-		var/obj/item/natural/rock/R = target
-		if(do_after(user, 2 SECONDS, target = user))
-			var/gain = rand(1,4)
-			qdel(R)
-			add_value(gain, user)
-			playsound(user.loc, 'sound/misc/smelter_sound.ogg', 25, FALSE)
+		if(value <= 0)
+			to_chat(user, span_warning("This cannot dissolve into entropic dust..."))
+			return
+
+		if(!do_after(user, 0.75 SECONDS, target = user))
+			return
+
+		if(istype(target, /obj/item/natural/rock))
+			var/obj/item/natural/rock/R = target
+			var/ore_value
+			if(R.type != /obj/item/natural/rock) // should simulate the bonus dosh from finding ores/gems in boulders
+				ore_value += rand(10,100)
+
+		stored_value += value
+		qdel(I)
+
+		to_chat(user, span_warning("The contents compress into entropic dust... <br>(Current Value: [stored_value])"))
+		playsound(user.loc, 'sound/misc/smelter_sound.ogg', 25, FALSE)
 		return
 
 	if(isturf(target))
 		process_stone_batch(user, target)
 
+// RESOLUTION
 /obj/item/matthios_canister/firstlaw/attack_self(mob/user)
 	if(!HAS_TRAIT(user, TRAIT_MATTHIOS_EYES))
 		to_chat(user, span_warning("This is heresy beyond me."))
@@ -522,13 +615,12 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 		to_chat(user, span_warning("The vial contains no transactable value."))
 		return
 
-	var/list/options = list(
+	var/choice = input(user, "How shall the First Law resolve?", "First Law") as null|anything in list(
 		"Coin begets Coin!",
 		"Return as Stones",
 		"Cancel"
 	)
 
-	var/choice = input(user, "How shall the First Law resolve?", "First Law") as null|anything in options
 	if(!choice || choice == "Cancel")
 		return
 
@@ -537,69 +629,57 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 
 	var/turf/T = get_turf(src)
 
-	// Refund into stone
 	if(choice == "Return as Stones")
 		resolve_stones(user, T)
-		return
+	else
+		new /obj/effect/temp_visual/barter_fx(T)
+		resolve_coinage(user, T)
 
-	// Coin conversion
-	new /obj/effect/temp_visual/barter_fx(T)
-	resolve_coinage(user, T)
-
+// STONE OUTPUT
 /obj/item/matthios_canister/firstlaw/proc/resolve_stones(mob/user, turf/T)
 	var/level = user.get_skill_level(/datum/skill/magic/holy)
 	var/batch_size = 2 + (level * 2)
-	var/resolved_any = FALSE
+
 	to_chat(user, span_notice("You release the concept of value into a more... solid shape."))
+
 	while(stored_value > 0)
 		if(!do_after(user, 1 SECONDS, target = user))
 			break
 
-		var/current_batch = min(batch_size, stored_value)
+		var/count = min(batch_size, stored_value)
 
-		for(var/i in 1 to current_batch)
+		for(var/i in 1 to count)
 			new /obj/item/natural/stone(T)
 
-		stored_value -= current_batch
-		resolved_any = TRUE
+		stored_value -= count
+		playsound(user.loc, 'sound/misc/smelter_sound.ogg', 20, FALSE)
 
-		playsound(user.loc, 'sound/misc/smelter_sound.ogg', 25, FALSE)
-
-		if(stored_value <= 0)
-			break
-
-	if(resolved_any)
-		to_chat(user, span_notice("The First Law loosens its grip, returning value from dust to crude matter.<br>(Remaining Value: [stored_value])"))
-		update_icon()
+	to_chat(user, span_notice("The First Law loosens its grip... <br>(Remaining Value: [stored_value])"))
+	update_icon()
 
 	if(stored_value <= 0)
 		playsound(T, 'sound/foley/glassbreak.ogg', 50, TRUE)
 		funny_smoke(src)
 		qdel(src)
 
-	return resolved_any
-	
+// COIN OUTPUT
 /obj/item/matthios_canister/firstlaw/proc/resolve_coinage(mob/user, turf/T)
 	playsound(T, 'sound/effects/matth_barter.ogg', 100, TRUE)
 
 	var/level = user.get_skill_level(/datum/skill/magic/holy)
-	var/check = 60 - (level * 10)
+	var/efficiency = min(100, 20 + (level * 20))
+	var/base = round(stored_value * (efficiency / 100))
+	var/result = base
 
-	var/efficiency = min(100, (20 + (level * 20)))
+	if(level <= SKILL_LEVEL_JOURNEYMAN && prob(60 - (level * 10)))
+		var/tax = rand(2,10)
+		to_chat(user, span_warning("Matthios claims His due... (1/[tax] lost)"))
+		result = round(base - (base / tax))
 
-	var/base_mammon = round(stored_value * (efficiency / 100))
-	var/mammon = base_mammon
+	if(result > 0)
+		budget2change(result, user, putinhands = FALSE, custom_turf = T)
 
-	if(level <= SKILL_LEVEL_JOURNEYMAN)
-		if(prob(check))
-			var/matthiostax = rand(2,10)
-			to_chat(user, span_warning("You sense Matthios claiming a little extra of His due in this deal... (1/[matthiostax] of the value was claimed.)"))
-			mammon = round(base_mammon - (base_mammon / matthiostax))
-
-	if(mammon > 0)
-		budget2change(mammon, user, putinhands = FALSE, custom_turf = T)
-
-	to_chat(user, span_notice("The First Law concludes. [stored_value] entropic dust is resolved at [efficiency]% efficiency into [mammon] value in coin."))
+	to_chat(user, span_notice("The First Law concludes. [stored_value] value → [result] coin ([efficiency]% efficiency)."))
 
 	funny_smoke(src)
 	qdel(src)
@@ -734,7 +814,7 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 		funny_smoke(src)
 		qdel(src)
 		return
-	
+
 	if(!ishungry && prob(80 - miraclecheck)) // bread troll
 		to_chat(user, span_warning("The mixture shifts... simplifying itself into something more befitting your greed."))
 		new /obj/item/reagent_containers/food/snacks/rogue/bread(get_turf(src))
@@ -744,7 +824,7 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 		qdel(src)
 		return
 
-	if(ishungry && prob(25)) 
+	if(ishungry && prob(25))
 		to_chat(user, span_notice("Matthios takes pity on your mortal limitations. You compulsively shout in gratitude!"))
 		user.say(pick("PRAISE YOU, O' GENEROUS MATTHIOS!!","AT LAST, THE TRUE GOLD OF CULINARY ALCHEMY!!","BLESSED BE THY HANDS WHICH GRANT ME SUSTENANCE, MATTHIOS!!","I SHALL GIVE ALL FOR THY SMILE, LORD OF FREEDOM!!"), language = /datum/language/common)
 
@@ -765,7 +845,7 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 /obj/item/matthios_canister/goodnite
 	name = "vial of goodnite base"
 	desc = "A dim, cloudy fluid rests inside, barely moving. Occasionally, something viscous streaks through it— like diluted brain matter. The glass feels warm, almost comforting. Staring at too long makes your eyelids heavy, and you get an odd compulsion to drink it."
-	
+
 	var/max_ingredients = 5
 
 	required_ingredients = list(
@@ -871,7 +951,7 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 		return
 
 	if(target == user)
-		to_chat(user, span_notice("You begin administering the vial to [target.name]'s forehead..."))	
+		to_chat(user, span_notice("You begin administering the vial to [target.name]'s forehead..."))
 	else
 		to_chat(user, span_notice("You begin administering the vial to your own forehead..."))
 
@@ -932,7 +1012,7 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 
 	spawn()
 		while(target && target.IsSleeping())
-			target.energy_add(20)
+			target.energy_add(50)
 
 			if(target.nutrition > 0)
 				target.adjustBruteLoss(-2)
@@ -942,7 +1022,7 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 				target.adjustOxyLoss(-4)
 				target.adjustToxLoss(-2)
 
-			sleep(20)
+			sleep(50)
 
 	to_chat(user, span_notice("The vial dulls and crumbles away."))
 	playsound(user.loc,'sound/misc/smelter_sound.ogg', 50, FALSE)
@@ -1254,7 +1334,7 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 			return TRUE
 
 		var/amount = min(20, R.reagents.total_volume)
-		
+
 		if(do_after(user, 2 SECONDS))
 			if(has_blood)
 				path = "blood"
@@ -1429,7 +1509,7 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 		if(do_after(user, 2 SECONDS, target = target))
 			if(is_vampire)
 				to_chat(target, span_notice("It tastes like very old wine... Rich, deep, and impossibly satisfying~"))
-				target.bloodpool += 75
+				target.adjust_bloodpool(75)
 				target.apply_status_effect(/datum/status_effect/buff/vitae)
 			else
 				to_chat(target, span_notice("It tastes like old wine... Strange, but not entirely unpleasant."))
@@ -1472,201 +1552,79 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 		qdel(src)
 
 	return TRUE
-/*
-/obj/item/matthios_canister/truthsnuke
-	name = "gilded bomb canister"
-	desc = "A sealed vessel packed with gray ruin and glimmering excess. Ash churns endlessly within, swallowing light, while a single mote of gold refuses to be consumed. It does not yearn for the Crown— it rejects it. Matthios once stole Astrata's fire not to kneel, but to prove no throne was sacred. This vessel follows that truth, straining to break authority itself."
-	icon_state = "impact_grenade"
-	icon = 'icons/roguetown/items/misc.dmi'
-	aura_color = "#ffee01"
-
-	var/needed_ash = 200
-	var/current_ash = 0
-
-	var/needed_coaldust = 100
-	var/current_coaldust = 0
-
-	var/needed_fire = 50
-	var/current_fire = 0
-
-	var/has_crown = FALSE
-	var/has_flower = FALSE
-
-	required_ingredients = list(
-		/obj/item/ash,
-		/obj/item/alch/coaldust,
-		/obj/item/alch/firedust,
-		/obj/item/reagent_containers/food/snacks/grown/rogue/fyritius,
-		/obj/item/clothing/head/roguetown/crown/serpcrown
-	)
-
-	ingredient_colors = list(
-		/obj/item/ash = "#4a4a4a",
-		/obj/item/alch/coaldust = "#2b2b2b",
-		/obj/item/alch/firedust = "#ff4500",
-		/obj/item/reagent_containers/food/snacks/grown/rogue/fyritius = "#ffae42",
-		/obj/item/clothing/head/roguetown/crown/serpcrown = "#ffd700"
-	)
-
-/obj/item/matthios_canister/truthsnuke/freeman_truth()
-	if(has_crown)
-		return "You did it. You stole her fire, just as He once did. Not begged, not granted. Taken. Hopefully. Let the crowns of this world tremble, for they were always a lie. A king is only a man who has not yet been defied."
-	else if(has_flower)
-		return "Fire is fire, no matter how it is kindled. Even a lie can burn. Still… you feel it, don't you? This is not the same. A shadow of the act. Perhaps next time, you take the real thing."
-	else
-		return "Matthios did not ask. He did not kneel. He reached into the heavens and took what was denied, and in doing so proved the truth: no throne is sacred, no ruler chosen. Power belongs to those who seize it. This work follows that path, but it is not yet complete."
-
-/obj/item/matthios_canister/truthsnuke/freeman_progress(mob/user)
-	return "Ash: [current_ash]/[needed_ash]\nCoal Dust: [current_coaldust]/[needed_coaldust]\nFire Essentia: [current_fire]/[needed_fire]\nAstrata's Ultimate Authority: [has_crown ? "present" : "missing"]\nFyritius Replacement: [has_flower ? "present" : "missing"]"
-
-/obj/item/matthios_canister/truthsnuke/attackby(obj/item/I, mob/user)
-	if(!HAS_TRAIT(user, TRAIT_MATTHIOS_EYES))
-		to_chat(user, span_warning("You can't begin to think where to start with this... insanity."))
-		return TRUE
-
-	if(istype(I, /obj/item/ash))
-		if(current_ash >= needed_ash)
-			to_chat(user, span_warning("The vessel can hold no more ruin."))
-			return TRUE
-
-		if(do_after(user, 1 SECONDS))
-			current_ash++
-			qdel(I)
-			current_color = ingredient_colors[/obj/item/ash]
-
-			to_chat(user, span_notice("The ash is swallowed. ([current_ash]/[needed_ash])"))
-			playsound(user, pick(da_bubbles), 30, FALSE)
-
-			update_icon()
-			check_completion(user)
-		return TRUE
-
-	if(istype(I, /obj/item/alch/coaldust))
-		if(current_coaldust >= needed_coaldust)
-			to_chat(user, span_warning("No more foundation can be laid."))
-			return TRUE
-
-		if(do_after(user, 1 SECONDS))
-			current_coaldust++
-			qdel(I)
-			current_color = ingredient_colors[/obj/item/alch/coaldust]
-
-			to_chat(user, span_notice("The dust settles into the mass. ([current_coaldust]/[needed_coaldust])"))
-			update_icon()
-			check_completion(user)
-		return TRUE
-
-	if(istype(I, /obj/item/alch/firedust))
-		if(current_fire >= needed_fire)
-			to_chat(user, span_warning("The essence within can grow no hotter."))
-			return TRUE
-
-		if(do_after(user, 1 SECONDS))
-			current_fire++
-			qdel(I)
-			current_color = ingredient_colors[/obj/item/alch/firedust]
-
-			to_chat(user, span_notice("The essence feeds the core. ([current_fire]/[needed_fire])"))
-			update_icon()
-			check_completion(user)
-		return TRUE
-
-	if(istype(I, /obj/item/reagent_containers/food/snacks/grown/rogue/fyritius))
-		if(has_flower)
-			to_chat(user, span_warning("The vessel already bears a fire within."))
-			return TRUE
-
-		if(has_crown)
-			to_chat(user, span_warning("Why settle for a dream, when you already have the real deal?"))
-			return TRUE
-
-		if(do_after(user, 2 SECONDS))
-			has_flower = TRUE
-			qdel(I)
-			current_color = ingredient_colors[/obj/item/reagent_containers/food/snacks/grown/rogue/fyritius]
-
-			to_chat(user, span_warning("The flower wilts… yet something answers. A lie, accepted."))
-			update_icon()
-			check_completion(user)
-		return TRUE
-
-	if(istype(I, /obj/item/clothing/head/roguetown/crown/serpcrown))
-		if(has_crown)
-			to_chat(user, span_warning("The vessel already bears true authority. But how can this be?"))
-			return TRUE
-
-		if(has_flower)
-			to_chat(user, span_warning("The false fire burns away as if to make way for the real deal."))
-			has_flower = FALSE
-
-		if(do_after(user, 2 SECONDS))
-			has_crown = TRUE
-			qdel(I)
-			current_color = ingredient_colors[/obj/item/clothing/head/roguetown/crown/serpcrown]
-
-			to_chat(user, span_notice("The Crown resists… and soon submits. The fire of Astrata is stolen once more. You feel HIS smile upon you."))
-			playsound(user, 'sound/misc/lava_death.ogg', 30, FALSE)
-
-			update_icon()
-			check_completion(user)
-		return TRUE
-
-	return TRUE
-
-/obj/item/matthios_canister/truthsnuke/check_completion(mob/user)
-	if(current_ash < needed_ash)
-		return
-	if(current_coaldust < needed_coaldust)
-		return
-	if(current_fire < needed_fire)
-		return
-
-	if(!has_crown && !has_flower)
-		return
-
-	alch_transform(user)
-
-/obj/item/matthios_canister/truthsnuke/alch_transform(mob/user)
-	to_chat(user, span_notice("The mixture collapses inward… then stabilizes."))
-
-	if(has_crown)
-		new /obj/item/impact_grenade/truthsnuke(get_turf(src))
-	else
-		new /obj/item/impact_grenade/truthsnuke/lesser(get_turf(src))
-	funny_smoke(src)
-	qdel(src)
-*/
 
 //EQUIPPABLES
 /obj/item/clothing/neck/roguetown/psicross/inhumen/matthios/gilded
-	name = "strange gilded amulet"
+	name = "ornate amulet of Matthios"
 	desc = "He was ever the one to make you ask questions: Why are we still here? Just to suffer? Nae. We are here to make a change. And a change we shall make, together."
 	icon_state = "matthios"
 	resistance_flags = FIRE_PROOF
-	slot_flags = ITEM_SLOT_NECK
+	slot_flags = ITEM_SLOT_NECK || ITEM_SLOT_RING
 	smeltresult = /obj/item/ash
-	var/grant_chant = FALSE
 	aura_color = "#ffe761"
+	var/grant_chant = FALSE
+	var/active_item = FALSE
+	var/stolen_fyre = FALSE
+
+/obj/item/clothing/neck/roguetown/psicross/inhumen/matthios/gilded/examine(mob/user)
+	. = ..()
+	if(HAS_TRAIT(user, TRAIT_FREEMAN) && stolen_fyre)
+		. += span_notice("<i>As coin begets coin, so too does Her pride beget ruin. She believes Her will absolute, yet She stands as anything but. The theft of Her fyre was merely the first proof. The future belongs to the free. To humenkind. Not to the rule of a weak tyrant and their blood-bound puppets.</i>")
+	if(HAS_TRAIT(user, TRAIT_FREEMAN))
+		. += span_warning("This amulet can be swapped into another form by using it on your hand.")
+
+/obj/item/clothing/neck/roguetown/psicross/inhumen/matthios/gilded/attack_self(mob/user)
+	if(!HAS_TRAIT(user, TRAIT_FREEMAN))
+		return
+	if(!do_after(user, 1 SECONDS))
+		return
+	stolen_fyre = !stolen_fyre
+
+	if(stolen_fyre)
+		name = "ornate amulet of Astrata"
+		desc = "Her command is absolute, and Her tyranny is unmarrable. Reclaim this world, child of mine, from those who'd seek to destroy it."
+		icon_state = "astrata_g"
+		to_chat(user, span_warning("The gilded amulet transmutates to a different form. You feel a smile, as you profane Her fyre the same way as He did."))
+		playsound(user.loc, 'sound/magic/swap.ogg', 25, TRUE, -2)
+	else
+		name = "ornate amulet of Matthios"
+		desc = "He was ever the one to make you ask questions: Why are we still here? Just to suffer? Nae. We are here to make a change. And a change we shall make, together."
+		icon_state = "matthios"
+		to_chat(user, span_warning("The gilded amulet settles back into familiar weight. You feel a grin, as He commends you for your boldness."))
+		playsound(user.loc, 'sound/magic/swap.ogg', 25, TRUE, -2)
+
+	update_icon()
 
 /obj/item/clothing/neck/roguetown/psicross/inhumen/matthios/gilded/equipped(mob/living/carbon/human/user, slot)
 	. = ..()
-	if(obj_broken)
+	if(obj_broken || active_item)
 		return
-	if(slot == (SLOT_NECK||SLOT_RING) && HAS_TRAIT(user, TRAIT_FREEMAN))
+	if((slot == SLOT_NECK || slot == SLOT_RING) && HAS_TRAIT(user, TRAIT_FREEMAN))
+		active_item = TRUE
 		if(!user.has_language(/datum/language/thievescant))
-			to_chat(user, span_info("You gain insight on Thieves' Cant.<br><br><i>Keep in mind these are 'words' that come out as gestures, so blend it between normal speech to make it not so obvious.</i>"))
+			to_chat(user, span_info("You gain insight on Thieves' Cant.<br><br><i>Keep in mind these are 'words' that come out as gestures, so blend it between normal speech to make it not so obvious.<br><font color=yellow>(Prefix: ,y)</font></i>"))
 			user.grant_language(/datum/language/thievescant)
 			grant_chant = TRUE
 		else
-			to_chat(user, span_info("You already know Thieves' Cant, but praise be Matthios."))
+			to_chat(user, span_info("You already know Thieves' Cant, but praise be Matthios anyway!"))
 
 /obj/item/clothing/neck/roguetown/psicross/inhumen/matthios/gilded/dropped(mob/living/carbon/human/user)
 	. = ..()
-	if(istype(user) && user.get_item_by_slot((SLOT_NECK||SLOT_RING)) == src)
-		if(grant_chant)
-			to_chat(user, span_info("The knowledge fades from my mind."))
-			user.remove_language(/datum/language/thievescant)
-			grant_chant = FALSE
+	if(!active_item)
+		return
+	active_item = FALSE
+	if(grant_chant)
+		to_chat(user, span_info("The knowledge fades from my mind."))
+		user.remove_language(/datum/language/thievescant)
+		grant_chant = FALSE
+
+/obj/item/clothing/neck/roguetown/psicross/inhumen/matthios/gilded/get_examine_highlight_status()
+	// If we have stolen fyre, it looks like an ornate Astratan amulet. Disguised...
+	if(stolen_fyre)
+		return null
+	// Otherwise, it's an undisguised and GAUDY Matthiosian amulet. Very obvious.
+	else
+		return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_SUSPICIOUS, HERESYDESC_MATTHIOS_ICON)
 
 /obj/item/clothing/gloves/roguetown/fingerless_leather/muffle_matthios
 	name = "gilded fingerless gloves"
@@ -1675,45 +1633,59 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 	armor = ARMOR_LEATHER
 	color = "#fce517" // we golden
 	aura_color = "#fff385"
+	var/active_item = FALSE
 
 /obj/item/clothing/gloves/roguetown/fingerless_leather/muffle_matthios/equipped(mob/living/carbon/human/user, slot)
 	. = ..()
-	if(obj_broken)
+	if(obj_broken || active_item)
 		return
 	if(slot == SLOT_GLOVES && HAS_TRAIT(user, TRAIT_FREEMAN))
+		active_item = TRUE
 		to_chat(user, span_info("Like Him, my hands ready to grasp the impossible."))
 		ADD_TRAIT(user, TRAIT_SILENT_LOCKPICK, "matthiosboon")
 
+/obj/item/clothing/gloves/roguetown/fingerless_leather/muffle_matthios/get_examine_highlight_status()
+	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_MATTHIOS_ARMOR)
+
 /obj/item/clothing/gloves/roguetown/fingerless_leather/muffle_matthios/dropped(mob/living/carbon/human/user)
 	. = ..()
-	if(istype(user) && user.get_item_by_slot(SLOT_GLOVES) == src)
-		to_chat(user, span_info("Once again, these hands are supplicant."))
-		REMOVE_TRAIT(user, TRAIT_SILENT_LOCKPICK, "matthiosboon")
+	if(!active_item)
+		return
+	active_item = FALSE
+	to_chat(user, span_info("Once again, these hands are supplicant."))
+	REMOVE_TRAIT(user, TRAIT_SILENT_LOCKPICK, "matthiosboon")
 
 /obj/item/clothing/mask/rogue/spectacles/matthios
 	name = "gilded spectacles"
 	desc = "A drakkyne's eyes are oft blindsided by greed, yet such vision does hold some merit."
 	armor = ARMOR_LEATHER
-	color = "#faf5cb" // we golden
+	color = "#faf5cb"
 	aura_color = "#fffb00"
+	var/active_item = FALSE
 
 /obj/item/clothing/mask/rogue/spectacles/matthios/equipped(mob/living/carbon/human/user, slot)
 	. = ..()
-	if(obj_broken)
+	if(obj_broken || active_item)
 		return
-	if(slot == SLOT_WEAR_MASK)
+	if(slot == SLOT_WEAR_MASK || slot == SLOT_HEAD)
 		if(HAS_TRAIT(user, TRAIT_FREEMAN))
+			active_item = TRUE
 			if(!user.has_status_effect(/datum/status_effect/buff/matthios_vision))
 				to_chat(user, span_info("Gold gleams where truth once hid."))
 				user.apply_status_effect(/datum/status_effect/buff/matthios_vision)
 		else
 			to_chat(user, span_warning("You look ridiculous and stupid. You are an amateur and a fool!"))
 
+/obj/item/clothing/mask/rogue/spectacles/matthios/get_examine_highlight_status()
+	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_MATTHIOS_RELIC)
+
 /obj/item/clothing/mask/rogue/spectacles/matthios/dropped(mob/living/carbon/human/user)
 	. = ..()
-	if(istype(user) && user.get_item_by_slot(SLOT_WEAR_MASK) == src)
-		to_chat(user, span_info("The gleam fades from my sight."))
-		user.remove_status_effect(/datum/status_effect/buff/matthios_vision)
+	if(!active_item)
+		return
+	active_item = FALSE
+	to_chat(user, span_info("The gleam fades from my sight."))
+	user.remove_status_effect(/datum/status_effect/buff/matthios_vision)
 
 /atom/movable/screen/alert/status_effect/buff/matthios_vision
 	name = "Gilded True Sight"
@@ -1725,7 +1697,7 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 	id = "matthios_vision"
 	alert_type = /atom/movable/screen/alert/status_effect/buff/matthios_vision
 	duration = -1
-	tick_interval = 15 SECONDS
+	tick_interval = 20 SECONDS
 
 /datum/status_effect/buff/matthios_vision/on_apply(mob/living/new_owner)
 	. = ..()
@@ -1743,80 +1715,30 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 
 /datum/status_effect/buff/matthios_vision/tick()
 	. = ..()
-
-	var/mob/living/carbon/crazymofo = owner
-	if(!crazymofo)
+	var/mob/living/carbon/C = owner
+	if(!C)
 		return
+	var/pickLV = C.get_skill_level(/datum/skill/misc/lockpicking)
+	var/holyLV = C.get_skill_level(/datum/skill/magic/holy)
+	var/weightedLV = (holyLV * 0.80) + (pickLV * 0.20)
+	var/halluc_chance = clamp(100 - (weightedLV * (100 / 6)), 0, 100)
 
-	var/pickLV = crazymofo.get_skill_level(/datum/skill/misc/lockpicking)
-	var/miracleLV = crazymofo.get_skill_level(/datum/skill/magic/holy)
-	var/resistLV = min(pickLV, miracleLV)
-	var/halluc_gain
-	var/pain_chance
-	var/eye_chance
-	var/fire_min
-	var/fire_max
+	// === HALLUCINATIONS ===
+	if(prob(halluc_chance))
+		if(C.hallucination < 400)
+			C.hallucination = min(400, C.hallucination + rand(5, 15))
+			to_chat(C, span_warning(pick("This sight was not made for me.","I can feel my thoughts peeling apart.","The world looks wrong.","I should remove this.","My mind recoils from what it sees.","Too much truth presses inward.","Matthios, is this true?!","Matthios, is this TRVE?!","I regret everything.","Something broke.","DAFUQ?","What is that?!","What is this?!","Where am I??","I see it clearly now.","The truth is fine. Everything is fine.","I'm fine... I'm fine... I'm fine...","I can see Matthios. He is grinning.","I can see Astrata. She is furious.","Is this right?","What is wrong?","Behind me.","Behind you.","Free is watching you.","Grand Liege...?","La li lu le lo?","There are too many angles here.","Why does the floor have veins?","I can hear colors.","The walls know my name.","This was hidden for a reason.","I understand less each second.","The shadows are explaining things.","Who moved the horizon?","The stars are too close.","My teeth feel observant.","Why is the silence screaming?","I looked too far.","Everything has a second face.","The room blinked.","Truth tastes metallic.","I can smell geometry.","Someone is standing inside my reflection.","I should not know this.","The corners are whispering.","I remember tomorrow.","My heartbeat is counting backwards.","Why are there footprints on the ceiling?","The light is lying.","There is another sky above this one.","Numbers keep crawling away.","The door was never a door.","I have too many hands.","Did the world always breathe?","I can see where prayers go.","Something old just noticed me.","The dust is watching.","My bones disagree.","Reality feels temporary.","I found the seam.","Don't turn around.","Too late.","I was always behind me.")))
+			C.Jitter(5)
 
-	switch(resistLV)
-		if(SKILL_LEVEL_NOVICE)
-			halluc_gain = 40
-			pain_chance = 60
-			eye_chance = 40
-			fire_min = 10
-			fire_max = 20
-		if(SKILL_LEVEL_APPRENTICE)
-			halluc_gain = 20
-			pain_chance = 40
-			eye_chance = 20
-			fire_min = 5
-			fire_max = 10
-		if(SKILL_LEVEL_JOURNEYMAN)
-			halluc_gain = 15
-			pain_chance = 25
-			eye_chance = 15
-			fire_min = 4
-			fire_max = 8
-		if(SKILL_LEVEL_EXPERT)
-			halluc_gain = 5
-			pain_chance = 10
-			eye_chance = 5
-			fire_min = 1
-			fire_max = 3
-		else
-			halluc_gain = 80
-			pain_chance = 100
-			eye_chance = 80
-			fire_min = 20
-			fire_max = 80
-
-	// Passive mental pressure
-	if(halluc_gain > 0 && crazymofo.hallucination < 200)
-		crazymofo.hallucination += rand(0, halluc_gain)
-
-	// Random discomfort / psychic burn
-	if(prob(pain_chance))
-		var/dmg = rand(fire_min, fire_max)
-		if(dmg > 0)
-			crazymofo.adjustFireLoss(dmg)
-
-		if(prob(35))
-			to_chat(crazymofo, span_warning(pick("This sight was not made for me.","I can feel my thoughts peeling apart.","The world looks wrong.","I should remove this.","My mind recoils from what it sees.","Too much truth presses inward.","Matthios, is this true?!","Matthios, is this TRVE?!","I regret everything.","Something broke.","DAFUQ?","What is that?!","What is this?!","Where am I??","I see it clearly now.","The truth is fine. Everything is fine.","I'm fine... I'm fine... I'm fine...","I can see Matthios. He is grinning.","I can see Astrata. She is furious.","Is this right?","What is wrong?","Behind me.","Behind you.","Free is watching you.","Grand Liege...?","La li lu le lo?","There are too many angles here.","Why does the floor have veins?","I can hear colors.","The walls know my name.","This was hidden for a reason.","I understand less each second.","The shadows are explaining things.","Who moved the horizon?","The stars are too close.","My teeth feel observant.","Why is the silence screaming?","I looked too far.","Everything has a second face.","The room blinked.","Truth tastes metallic.","I can smell geometry.","Someone is standing inside my reflection.","I should not know this.","The corners are whispering.","I remember tomorrow.","My heartbeat is counting backwards.","Why are there footprints on the ceiling?","The light is lying.","There is another sky above this one.","Numbers keep crawling away.","The door was never a door.","I have too many hands.","Did the world always breathe?","I can see where prayers go.","Something old just noticed me.","The dust is watching.","My bones disagree.","Reality feels temporary.","I found the seam.","Don't turn around.","Too late.","I was always behind me.")))
-	
+	if(holyLV < SKILL_LEVEL_JOURNEYMAN)
 		if(prob(25))
-			crazymofo.Jitter(3)
+			var/dmg = rand(1, 15)
+			C.adjustFireLoss(dmg)
 
-	if(prob(eye_chance))
-		crazymofo.blur_eyes(3)
-		crazymofo.adjust_blurriness(5)
-
-		if(prob(50))
-			crazymofo.blind_eyes(1)
-
-		if(prob(35))
-			to_chat(crazymofo, span_alert("My eyes sting!"))
-
-	if(prob(max(1, pain_chance / 4)))
-		crazymofo.emote(pick("shiver","groan","whimper"))
+	if(holyLV < SKILL_LEVEL_EXPERT)
+		if(prob(30))
+			C.emote(pick("breathgasp","shiver","groan","whimper","pain","sigh","giggle","laugh","cackle"))
+			C.Jitter(10)
 
 /obj/item/clothing/shoes/roguetown/boots/muffle_matthios //I guess in case someone wants to make generic muffled boots? Change it to muffle/matthios if you do
 	name = "gilded leather boots"
@@ -1840,6 +1762,9 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 		to_chat(user, span_info("Once again, I am under Her gaze."))
 		REMOVE_TRAIT(user, TRAIT_SILENT_FOOTSTEPS, "matthiosboon")
 		REMOVE_TRAIT(user, TRAIT_LIGHT_STEP, "matthiosboon")
+
+/obj/item/clothing/shoes/roguetown/boots/muffle_matthios/get_examine_highlight_status()
+	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_MATTHIOS_ARMOR) //These were always meant to be valid I don't get why this was forgotten about
 
 //THROWABLES
 /obj/item/impact_grenade/truthsnuke/lesser
@@ -2105,6 +2030,9 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 	. = ..()
 	AddComponent(/datum/component/cursed_item, (TRAIT_FREEMAN||TRAIT_XYLIX), "BLESSED POUCH")
 
+/obj/item/storage/belt/rogue/pouch/matthios/get_examine_highlight_status()
+	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_SUSPICIOUS, HERESYDESC_MATTHIOS_MISC)
+
 /obj/item/storage/backpack/rogue/backpack/matthios
 	name = "smuggling bag"
 	desc = "A sack tied with some 'blessed' rope. There is a carving of a grinning symbol within the side of it. It has a strange, gilded glow to it."
@@ -2118,16 +2046,22 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 	. = ..()
 	AddComponent(/datum/component/cursed_item, (TRAIT_FREEMAN||TRAIT_XYLIX), "BLESSED RUCKSACK")
 
+/obj/item/storage/backpack/rogue/backpack/matthios/get_examine_highlight_status()
+	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_SUSPICIOUS, HERESYDESC_MATTHIOS_MISC)
+
 /obj/item/rope/chain/matthios
 	name = "gilded chain"
-	desc = "A heavy, gilded chain that thrums with latent divine power. It resonates negatively with the essence of nobility, as if stirred by divine rebuke."	
+	desc = "A heavy, gilded chain that thrums with latent divine power. It resonates negatively with the essence of nobility, as if stirred by divine rebuke."
 	color = "#fdff86"
 	aura_color = "#fff385"
 	matthios_chains = TRUE
 	smeltresult = /obj/item/ash
 
+/obj/item/rope/chain/matthios/get_examine_highlight_status()
+	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_MATTHIOS_RELIC)
+
 /obj/item/melee/touch_attack/lesserknock/matthios
-	name = "Gilded Lockpick"
+	name = "gilded lockpick"
 	desc = "A golden, glowing lockpick that appears to be held together by the truth of Matthios. To dispel it, simply use it on anything that isn't a door."
 	catchphrase = null
 	possible_item_intents = list(/datum/intent/use)
@@ -2141,3 +2075,6 @@ var/global/list/da_bubbles = list('sound/foley/bubb (1).ogg','sound/foley/bubb (
 
 /obj/item/melee/touch_attack/lesserknock/attack_self()
 	qdel(src)
+
+/obj/item/melee/touch_attack/lesserknock/matthios/get_examine_highlight_status()
+	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_MATTHIOS_RELIC)

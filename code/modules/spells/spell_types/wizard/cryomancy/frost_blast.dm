@@ -21,7 +21,7 @@
 	charge_required = TRUE
 	weapon_cast_penalized = TRUE
 	charge_time = 1 SECONDS
-	charge_drain = 1
+	hold_drain = 1
 	charge_slowdown = CHARGING_SLOWDOWN_SMALL
 	charge_sound = 'sound/magic/charging.ogg'
 	cooldown_time = 10 SECONDS
@@ -31,8 +31,10 @@
 	point_cost = 3
 	spell_impact_intensity = SPELL_IMPACT_MEDIUM
 
+	spell_requirements = SPELL_REQUIRES_NO_ANTIMAGIC | SPELL_REQUIRES_HUMAN
+
 	var/line_length = 4
-	var/blast_damage = 40
+	var/blast_damage = 36
 	var/push_dist = 2
 
 /datum/action/cooldown/spell/frost_blast/cast(atom/cast_on)

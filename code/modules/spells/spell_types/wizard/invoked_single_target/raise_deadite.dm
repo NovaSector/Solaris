@@ -2,7 +2,7 @@
 	name = "Raise Deadite"
 	desc = "Infuse the target with quick acting Rot, raising them as a deadite. They will not be friendly to you."
 	button_icon = 'icons/mob/actions/roguespells.dmi'
-	button_icon_state = "raisedead"
+	button_icon_state = "blesscrop"
 	sound = 'sound/magic/whiteflame.ogg'
 
 	click_to_activate = TRUE
@@ -16,7 +16,7 @@
 
 	charge_required = TRUE
 	charge_time = 6 SECONDS
-	charge_drain = 1
+	hold_drain = 1
 	charge_slowdown = 2
 	charge_sound = 'sound/magic/charging.ogg'
 	cooldown_time = 30 SECONDS

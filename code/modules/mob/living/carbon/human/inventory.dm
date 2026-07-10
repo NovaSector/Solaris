@@ -392,7 +392,21 @@
 	if(!O)
 		return 0
 
-	return O.equip(src, visualsOnly)
+	. = O.equip(src, visualsOnly)
+	if(!visualsOnly)
+		// Recalculate pain threshold for NPC since they set STAWIL directly
+		if(ai_controller)
+			recalculate_pain_threshold()
+		if(!client && !mind)
+			taints_loot = TRUE
+		if(taints_loot)
+			flag_worn_as_looted()
+
+/mob/living/carbon/human/proc/flag_worn_as_looted()
+	for(var/obj/item/I in get_equipped_items(TRUE) + held_items)
+		if(I.no_loot_taint)
+			continue
+		I.mark_as_looted()
 
 
 //delete all equipment without dropping anything

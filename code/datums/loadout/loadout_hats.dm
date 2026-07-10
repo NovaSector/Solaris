@@ -19,6 +19,11 @@
 	path = /obj/item/clothing/head/roguetown/archercap
 	sort_category = "Hats"
 
+/datum/loadout_item/cap
+	name = "Cap"
+	path = /obj/item/clothing/head/roguetown/cap
+	sort_category = "Hats"
+
 /datum/loadout_item/tiyon
 	name = "Tiyon"
 	path = /obj/item/clothing/head/roguetown/tiyon
@@ -154,6 +159,17 @@
 	path = /obj/item/flowercrown/rosa
 	sort_category = "Hats"
 
+/datum/loadout_item/thorn_rosa_crown
+	name = "Rosa Crown with Thorns"
+	path = /obj/item/flowercrown/rosa/thorns
+	sort_category = "Hats"
+
+/datum/loadout_item/dyeable_crown
+	name = "Gray Flower Crown"
+	path = /obj/item/flowercrown/rosa/dyecrown
+	sort_category = "Hats"
+
+
 /datum/loadout_item/salvia_crown
 	name = "Salvia Crown"
 	path = /obj/item/flowercrown/salvia
@@ -199,3 +215,22 @@
 	path = /obj/item/clothing/head/roguetown/jester
 	sort_category = "Hats"
 
+/datum/loadout_item/shawl
+	name = "Shawl"
+	path = /obj/item/clothing/head/roguetown/shawl
+	sort_category = "Hats"
+  
+/datum/loadout_item/maidband
+	name = "Maid Headdress"
+	path = /obj/item/clothing/head/roguetown/maidhead
+	sort_category = "Hats"
+
+/datum/loadout_item/maidbandfancy
+	name = "Valorian Maid Headband"
+	path = /obj/item/clothing/head/roguetown/maidband
+	sort_category = "Hats"
+
+/datum/loadout_item/loudmouth_headgear
+	name = "Loudmouth's Headcover"
+	path = /obj/item/clothing/head/roguetown/veiled/loudmouth
+	sort_category = "Hats"

@@ -136,12 +136,12 @@
 		return
 
 	// Has user a bank account?
-	if(!(user in SStreasury.bank_accounts))
+	if(!SStreasury.has_account(user))
 		say("You have no bank account.")
 		return
 
 	// Has user enough money?
-	if(SStreasury.bank_accounts[user] < amount)
+	if(SStreasury.get_balance(user) < amount)
 		say("Insufficient balance funds.")
 		return
 
@@ -153,15 +153,9 @@
 	var/confirm = input(user, "Do you dare unleash this darkness upon the world? Your name will be known.", src) as null|anything in list("Yes", "No")
 	if(isnull(confirm) || confirm == "No") return
 
-	// Deduct money from user
-	SStreasury.bank_accounts[user] -= round(amount)
-
-	//Deduct royal tax from amount
-	var/royal_tax = round(amount * 0.1)
-	SStreasury.treasury_value += royal_tax
-	SStreasury.log_entries += "+[royal_tax] to treasury (bounty tax)"
-
-	amount -= royal_tax
+	var/datum/fund/user_account = SStreasury.get_account(user)
+	amount = round(amount)
+	SStreasury.burn(user_account, amount, "bounty placement - [target.real_name]")
 
 	var/race = target.dna.species
 	var/gender = target.gender
@@ -229,17 +223,15 @@
 	if(choice != "Yes")
 		return
 
-	if(!(user in SStreasury.bank_accounts))
+	if(!SStreasury.has_account(user))
 		say("You have no bank account.")
 		return
 
-	if(SStreasury.bank_accounts[user] < cost)
+	if(SStreasury.get_balance(user) < cost)
 		say("Insufficient funds. [cost] mammons required.")
 		return
 
-	SStreasury.bank_accounts[user] -= cost
-	SStreasury.treasury_value += cost
-	SStreasury.log_entries += "+[cost] to treasury (bounty scroll fee)"
+	SStreasury.transfer(SStreasury.get_account(user), SStreasury.discretionary_fund, cost, "bounty scroll fee")
 
 	var/obj/item/paper/scroll/bounty/scroll = new(get_turf(src))
 	scroll.update_bounty_text()
@@ -377,7 +369,7 @@
 			A.flash_fullscreen("redflash3")
 			A.Stun(10)
 			A.apply_damage(10, BRUTE, def_zone)
-			A.emote("whimper")
+			A.emote("whimper", forced = TRUE)
 			return
 	if(!ismob(M))
 		say("Unable to comply without a subject. Aborting...")
@@ -460,6 +452,8 @@
 			message_admins("[M.real_name] was killed by the EXCIDIUM.")
 			log_admin("[M.real_name] was killed by the EXCIDIUM.")
 			playsound(src, 'sound/combat/vite.ogg', 100, FALSE, -1)
+			M.emote("superagony")
+			M.visible_message(span_warningbig("The CASTIFICO begins GRUESOMELY SHAVING OUT every bit and ounce of [M]'s FLESH on their HEAD, leaving only a grinning, bleeding skull behind. Justice has been served."))
 			victim_head.skeletonize()
 			submission = TRUE
 	else

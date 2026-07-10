@@ -1,11 +1,5 @@
 /*ALL DEFINES RELATED TO COMBAT GO HERE*/
 
-// Guidance system - used by parry.dm, dodge.dm, accuracy_checks.dm, and bardic songs
-#define FULL_GUIDANCE_CHANCE 20 // % parry/dodge bypass and parry/dodge chance (mage Guidance, Bard Fantasia/Requiem)
-#define LESSER_GUIDANCE_CHANCE 12 // % parry/dodge bypass and parry/dodge chance (Cantor/Spellsinger songs)
-#define FULL_GUIDANCE_ACCURACY 8 // Accuracy bonus from guidance (equivalent to 1 skill level)
-#define LESSER_GUIDANCE_ACCURACY 5 // Accuracy bonus from lesser guidance
-
 /// Alternate attack defines. Return these at the end of procs like afterattack_secondary.
 /// Calls the normal attack proc. For example, if returned in afterattack_secondary, will call afterattack.
 /// Will continue the chain depending on the return value of the non-alternate proc, like with normal attacks.
@@ -143,6 +137,10 @@
 #define DISLOCATED_ADD_SLOWDOWN 2
 //slowdown for fractured limbs
 #define FRACTURED_ADD_SLOWDOWN 3
+//slowdown for armour class. movement speed only.
+#define AC_LIGHT_SPDCAP 20
+#define AC_MEDIUM_SPDCAP 13
+#define AC_HEAVY_SPDCAP 11
 
 //Attack types for checking shields/hit reactions
 #define MELEE_ATTACK 1
@@ -188,6 +186,7 @@
 #define BCLASS_PUNISH		"punish"
 #define BCLASS_EFFECT		"effect"
 #define BCLASS_SUNDER       "sunder"
+#define BCLASS_DISARM		"disarm"
 
 //Material class (what material is striking)
 #define MCLASS_GENERIC		1
@@ -324,9 +323,9 @@ GLOBAL_LIST_INIT(shove_disarming_types, typecacheof(list(
 //We will round to this value in damage calculations.
 #define DAMAGE_PRECISION 0.1
 
-#define STRONG_STANCE_DMG_BONUS 0.1
-#define STRONG_SHP_BONUS 2
-#define STRONG_INTG_BONUS 2
+#define STRONG_STANCE_DMG_BONUS 0.15
+#define STRONG_SHP_BONUS 3
+#define STRONG_INTG_BONUS 3
 
 //bullet_act() return values
 #define BULLET_ACT_HIT				"HIT"		//It's a successful hit, whatever that means in the context of the thing it's hitting.
@@ -362,18 +361,30 @@ GLOBAL_LIST_INIT(shove_disarming_types, typecacheof(list(
 
 #define BASE_PARRY_STAMINA_DRAIN 5 // Unmodified stamina drain for parry, now a var instead of setting on simplemobs
 #define BAD_GUARD_FATIGUE_DRAIN 20 //Percentage of your green bar lost on letting a guard expire.
-#define EXPOSED_INTEG_MOD 2.5	//Multiplier for integrity damage if we hit an Exposed target.
-#define VULN_INTEG_MOD 1.3		//Multiplier for integrity damage if we hit a Vulnerable target.
+#define EXPOSED_INTEG_MOD 2.5	//Multiplier for melee integrity / simple-mob damage if we hit an Exposed target.
+#define VULN_INTEG_MOD 1.3		//Multiplier for melee integrity / simple-mob damage if we hit a Vulnerable target.
+#define EXPOSED_INTEG_FLAT 45	//Flat integrity damage added when hitting an Exposed target.
+#define VULN_INTEG_FLAT 20		//Flat integrity damage added when hitting a Vulnerable target.
 #define BASE_RCLICK_CD 30 SECONDS
 #define BAIT_RCLICK_CD 20 SECONDS
 #define BIND_CD 15 SECONDS
 #define FEINT_RCLICK_CD 20 SECONDS
 
-#define BIND_HANDS 1
-#define BIND_FEET 2
-#define BIND_HEAD 3
-#define BIND_TORSO 4
-#define BIND_NECK 5
+/* BIND DEFINES */
+
+#define BIND_HAND_L 1
+#define BIND_HAND_R 2
+#define BIND_FOOT_L 3
+#define BIND_FOOT_R 4
+#define BIND_HEAD 5
+#define BIND_TORSO 6
+#define BIND_NECK 7
+
+/* SWIFT BALANCE DEFINES */
+#define SWIFTCAP_CHEST 10
+#define SWIFTCAP_LIMBS 25
+#define SWIFTCAP_PRECISE 45
+#define STAM_DRAIN_PER_STR_DIFF_HEAVY_BAL -2
 
 /* TEMPO DEFINES */
 #define TEMPO_CULL_DELAY 	12 SECONDS	//Interval for checking our tempo lists. Only relevant to player mobs with TRAIT_TEMPO
@@ -401,6 +412,11 @@ GLOBAL_LIST_INIT(shove_disarming_types, typecacheof(list(
 	#define TEMPO_DODGE_LOSS_LESS 1
 	#define TEMPO_DODGE_LOSS_NONE 2
 #define TEMPO_TAG_BINDABLE "defbindable"
+#define TEMPO_TAG_EQUIPTOSS "equiptoss"
+
+#define TEMPO_FACTION_KEEP (1 << 0)
+#define TEMPO_FACTION_WRETCH (1 << 1)
+#define TEMPO_FACTION_CHURCH (1 << 2)
 
 /*
 Medical defines
@@ -417,9 +433,10 @@ Medical defines
 /*
  Misc. Category. Spin it out if needed
 */
-#define CRIT_DISMEMBER_DAMAGE_THRESHOLD 0.9 // 90% damage threshold for dismemberment / crit
+#define CRIT_DISMEMBER_DAMAGE_THRESHOLD 0.7 // 90% damage threshold for dismemberment / crit
 #define STANDING_DECAP_GRACE_PERIOD 2 SECONDS // Time after falling prone where you still count as standing for decap purpose
 #define INT_NOISE_DELAY 1 SECONDS
+#define CRIT_ARMOUR_THRESHOLD 0.35 // ratio of obj_integrity and max_integrity for zone armour. Beyond this, crits are prevented.
 
 /*
 	Critical Resistance Defines 
@@ -455,3 +472,6 @@ Medical defines
 
 #define MAX_DODGE_CEIL 5
 #define MAX_DODGE_FLOOR -15
+
+// How long we can't use stealth & other misc. things for
+#define IN_COMBAT_DELAY 10 SECONDS

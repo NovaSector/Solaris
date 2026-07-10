@@ -23,7 +23,7 @@
 	charge_required = TRUE
 	weapon_cast_penalized = TRUE
 	charge_time = CHARGETIME_HEAVY
-	charge_drain = 1
+	hold_drain = 1
 	charge_slowdown = CHARGING_SLOWDOWN_MEDIUM
 	charge_sound = 'sound/magic/charging.ogg'
 	cooldown_time = 20 SECONDS
@@ -36,7 +36,7 @@
 	spell_requirements = SPELL_REQUIRES_NO_ANTIMAGIC | SPELL_REQUIRES_HUMAN | SPELL_REQUIRES_SAME_Z
 
 	var/delay = TELEGRAPH_HIGH_IMPACT
-	var/damage = 65
+	var/damage = 59
 	var/area_of_effect = 2
 
 /datum/action/cooldown/spell/snap_freeze/cast(atom/cast_on)

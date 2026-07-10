@@ -354,8 +354,8 @@
 		pickchance *= P.picklvl
 		pickchance = clamp(pickchance, 1, 95)
 
-		if(gildedeyes && picktime <= 10) // limited this to missionary-only
-			picktime = 10
+		if(gildedeyes)
+			picktime = clamp(picktime, 10, 15)
 
 		while(!QDELETED(I) &&(lockprogress < locktreshold))
 			if(!do_after(user, picktime, target = src))
@@ -453,9 +453,6 @@
 		return
 	user.changeNext_move(CLICK_CD_INTENTCAP)
 	toggle(user)
-
-/obj/structure/closet/attack_paw(mob/user)
-	return attack_hand(user)
 
 // tk grab then use on self
 /obj/structure/closet/attack_self_tk(mob/user)

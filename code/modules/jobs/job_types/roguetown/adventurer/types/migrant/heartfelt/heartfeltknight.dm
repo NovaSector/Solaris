@@ -4,10 +4,11 @@
 	tutorial = "You are a Knight of Heartfelt, part of a brotherhood in service to your Lord. \
 	Now, alone and committed to safeguarding the court, you ride to the Peaks, resolved to ensure their safe arrival."
 	allowed_sexes = list(MALE, FEMALE)
-	allowed_races = RACES_SHUNNED_UP
+	forbidden_races = list(RACES_CONSTRUCT RACES_DESPISED)
 	total_positions = 1
 	spawn_positions = 1
 	job_traits = list(TRAIT_NOBLE, TRAIT_HEAVYARMOR, TRAIT_HEARTFELT)
+	noble_income = 15
 	advclass_cat_rolls = list(CTAG_HFT_KNIGHT)
 	job_subclasses = list(
 		/datum/advclass/heartfelt/knight
@@ -47,7 +48,7 @@
 	tutorial = "You are a Knight of Heartfelt, once part of a brotherhood in service to your Lord. \
 	Now, alone and committed to safeguarding what remains of your court, you ride to the Peaks, resolved to ensure their safe arrival."
 	allowed_sexes = list(MALE, FEMALE)
-	allowed_races = RACES_SHUNNED_UP
+	forbidden_races = list(RACES_CONSTRUCT RACES_DESPISED)
 	outfit = /datum/outfit/job/heartfelt/knight
 	maximum_possible_slots = 1
 	pickprob = 100
@@ -163,7 +164,7 @@
 			r_hand = /obj/item/rogueweapon/eaglebeak/lucerne
 			H.adjust_skillrank_up_to(/datum/skill/combat/polearms, SKILL_LEVEL_EXPERT, TRUE)
 
-	var/helmet = list("Pigface Bascinet","Guard Helmet","Barred Helmet","Bucket Helmet","Knight's Helmet","Knight's Armet","Volf Plate Helmet" ,"Visored Sallet","Armet","Hounskull Bascinet", "Etruscan Bascinet", "Slitted Kettle")
+	var/helmet = list("Pigface Bascinet","Guard Helmet","Barred Helmet","Bucket Helmet","Knight's Helmet","Knight's Armet","Volfskulle Bascinet" ,"Visored Sallet","Armet","Hounskull Bascinet", "Etruscan Bascinet", "Slitted Kettle")
 	var/helmet_choice = input(H, "Choose your Helm.", "TAKE UP HELMS") as anything in helmet
 	switch(helmet_choice)
 		if("Pigface Bascinet") 
@@ -178,7 +179,7 @@
 			head = /obj/item/clothing/head/roguetown/helmet/heavy/knight/old
 		if("Knight's Armet")		
 			head = /obj/item/clothing/head/roguetown/helmet/heavy/knight
-		if("Volf Plate Helmet") 
+		if("Volfskulle Bascinet")
 			head = /obj/item/clothing/head/roguetown/helmet/heavy/volfplate
 		if("Visored Sallet")	
 			head = /obj/item/clothing/head/roguetown/helmet/sallet/visored

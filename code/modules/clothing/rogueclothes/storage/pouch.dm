@@ -168,6 +168,8 @@
 	. = ..()
 	var/obj/item/roguecoin/copper/pile/H = SSwardrobe.provide_type(/obj/item/roguecoin/copper/pile, loc)
 	if(istype(H))
+		if(H.quantity < 10)
+			H.set_quantity(10)
 		if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, H, null, TRUE, TRUE))
 			SSwardrobe.recycle_object(H)
 	if(prob(50))
@@ -282,6 +284,21 @@
 		if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, A, null, TRUE, TRUE))
 			SSwardrobe.recycle_object(A)
 
+/obj/item/storage/belt/rogue/pouch/coins/aalloy/rich
+
+/obj/item/storage/belt/rogue/pouch/coins/aalloy/rich/get_types_to_preload()
+	var/list/to_preload = list() 
+	to_preload += /obj/item/roguecoin/aalloy/pile
+	return to_preload
+
+/obj/item/storage/belt/rogue/pouch/coins/aalloy/rich/PopulateContents()
+	. = ..()
+	for(var/i in 1 to 3) //hilarious
+		var/obj/item/roguecoin/aalloy/pile/A = SSwardrobe.provide_type(/obj/item/roguecoin/aalloy/pile, loc)
+		if(istype(A))
+			if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, A, null, TRUE, TRUE))
+				SSwardrobe.recycle_object(A)
+
 /obj/item/storage/belt/rogue/pouch/food/PopulateContents()
 	new /obj/item/reagent_containers/food/snacks/rogue/crackerscooked(src)
 
@@ -299,7 +316,7 @@
 	new /obj/item/reagent_containers/glass/bottle/alchemical(src)
 	new /obj/item/reagent_containers/glass/bottle/alchemical(src)
 	new /obj/item/needle(src)
-  
+
 /obj/item/storage/belt/rogue/pouch/zigarrete
 	name = "zig box"
 	desc = "Used to hold someone's zigs and flints."
@@ -343,9 +360,9 @@
 /obj/item/storage/belt/rogue/pouch/bombs
 
 /obj/item/storage/belt/rogue/pouch/bombs/PopulateContents()
-	new /obj/item/bomb(src)
-	new /obj/item/bomb(src)
-	new /obj/item/bomb(src)
+	new /obj/item/bomb/noshard(src)
+	new /obj/item/bomb/noshard(src)
+	new /obj/item/bomb/noshard(src)
 
 /obj/item/storage/belt/rogue/pouch/tailorscrap
 	name = "pouch of tailorscrap"

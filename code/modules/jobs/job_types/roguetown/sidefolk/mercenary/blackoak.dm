@@ -3,11 +3,7 @@
 	name = "Black Oaken Guardian"
 	tutorial = "A shady guardian of the Black Oaks. Half mercenary band, half irregular militia fighting for control of their ancestral elven homeland of the Peaks. Thankfully, you are not here today to shed the blood of the Duke's men — unless someone pays you to..."
 	allowed_sexes = list(MALE, FEMALE)
-	allowed_races = list(
-		/datum/species/human/halfelf,
-		/datum/species/elf/wood,
-		/datum/species/elf/dark,
-	)
+	forbidden_races = list(RACES_BLACKOAK)
 	outfit = /datum/outfit/job/roguetown/mercenary/blackoak
 	class_select_category = CLASS_CAT_RACIAL
 	category_tags = list(CTAG_MERCENARY)
@@ -85,11 +81,7 @@
 	name = "Black Oaken Ranger"
 	tutorial = "A shady ranger of the Black Oaks. Half mercenary band, half irregular militia fighting for control of their ancestral elven homeland of the Peaks. Thankfully, you are not here today to shed the blood of the Duke's men — unless someone pays you to..."
 	allowed_sexes = list(MALE, FEMALE)
-	allowed_races = list(
-		/datum/species/human/halfelf,
-		/datum/species/elf/wood,
-		/datum/species/elf/dark,
-	)
+	forbidden_races = list(RACES_BLACKOAK)
 	outfit = /datum/outfit/job/roguetown/mercenary/blackoak_ranger
 	class_select_category = CLASS_CAT_RACIAL
 	category_tags = list(CTAG_MERCENARY)
@@ -181,11 +173,7 @@
 	name = "Black Oaken Adept"
 	tutorial = "A spellblade of the Black Oaks. Half mercenary band, half irregular militia fighting for control of their ancestral elven homeland of the Peaks. You have honed the ancient Azurean art of spellbladery - an art that is yours and your people's alone. Thankfully, you are not here today to shed the blood of the Duke's men - unless someone pays you to..."
 	allowed_sexes = list(MALE, FEMALE)
-	allowed_races = list(
-		/datum/species/human/halfelf,
-		/datum/species/elf/wood,
-		/datum/species/elf/dark,
-	)
+	forbidden_races = list(RACES_BLACKOAK)
 	outfit = /datum/outfit/job/roguetown/mercenary/blackoak_adept
 	class_select_category = CLASS_CAT_RACIAL
 	category_tags = list(CTAG_MERCENARY)
@@ -250,7 +238,7 @@
 		/obj/item/storage/belt/rogue/pouch/coins/poor = 1,
 		/obj/item/flashlight/flare/torch = 1,
 		/obj/item/rogueweapon/scabbard/sheath = 1,
-		/obj/item/book/spellbook = 1,
+		/obj/item/rogueweapon/spellbook/greater = 1,
 		/obj/item/chalk = 1,
 		)
 
@@ -286,8 +274,8 @@
 				H.mind.AddSpell(new /datum/action/cooldown/spell/advance)
 				H.mind.AddSpell(new /datum/action/cooldown/spell/gate_of_reckoning)
 			if("macebearer")
-				H.mind.AddSpell(new /datum/action/cooldown/spell/projectile/kastvyl)
-				H.mind.AddSpell(new /datum/action/cooldown/spell/tremor)
+				H.mind.AddSpell(new /datum/action/cooldown/spell/telegraphed_strike/spellblade/shatter)
+				H.mind.AddSpell(new /datum/action/cooldown/spell/telegraphed_strike/spellblade/tremor)
 				H.mind.AddSpell(new /datum/action/cooldown/spell/charge)
 				H.mind.AddSpell(new /datum/action/cooldown/spell/cataclysm)
 
@@ -335,11 +323,13 @@
 					r_hand = /obj/item/rogueweapon/mace/warhammer/steel
 				if("Grand Mace")
 					r_hand = /obj/item/rogueweapon/mace/goden/steel
+					backr = /obj/item/rogueweapon/scabbard/gwstrap
 				if("Battle Axe")
 					r_hand = /obj/item/rogueweapon/stoneaxe/battle
 					picked_axe = TRUE
 				if("Steel Greataxe")
 					r_hand = /obj/item/rogueweapon/greataxe/steel
+					backr = /obj/item/rogueweapon/scabbard/gwstrap
 					picked_axe = TRUE
 			if(picked_axe)
 				H.adjust_skillrank_up_to(/datum/skill/combat/axes, SKILL_LEVEL_EXPERT, TRUE)

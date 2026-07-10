@@ -18,17 +18,13 @@
 	return 0
 
 /turf/open/get_slowdown(mob/user)
-	var/total_slowdown = slowdown
+	. = slowdown
+	if(platform_atom_count > 0)
+		return
 	for(var/obj/obj in contents)
-		if(obj.obj_flags & BLOCK_Z_OUT_DOWN)
-			return slowdown
-		total_slowdown += obj.object_slowdown
-	return total_slowdown
-
-/turf/open/can_traverse_safely(atom/movable/traveler)
+		. += obj.object_slowdown
 	if(active_hotspot)
-		return FALSE
-	return ..()
+		. += 15
 
 /turf
 	var/landsound = null

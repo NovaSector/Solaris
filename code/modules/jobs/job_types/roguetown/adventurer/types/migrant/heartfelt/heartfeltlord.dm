@@ -5,11 +5,12 @@
 	However, with the increase in banditry, necromancy, deadite risings, and increasing sea raider raids, there are rumors abound that Heartfelt is not what it used to be. \
 	Travellers often warn of Heartfelt having fallen already, and words of secretive cultists isn't unheard of."
 	allowed_sexes = list(MALE, FEMALE)
-	allowed_races = RACES_SHUNNED_UP
+	forbidden_races = list(RACES_CONSTRUCT RACES_DESPISED)
 	outfit = null
 	total_positions = 1
 	spawn_positions = 0
 	job_traits = list(TRAIT_NOBLE, TRAIT_HEAVYARMOR, TRAIT_HEARTFELT)
+	noble_income = 50
 	advclass_cat_rolls = list(CTAG_HFT_LORD)
 	job_subclasses = list(
 		/datum/advclass/heartfelt/lord/lord,
@@ -88,7 +89,7 @@
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/order/heartfelt/bolster)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/order/heartfelt/charge)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/order/heartfelt/forheartfelt)
-		H.verbs |= list(/mob/living/carbon/human/mind/proc/setordersheartfelt)
+		add_verb(H, list(/mob/living/carbon/human/mind/proc/setordersheartfelt))
 
 /datum/advclass/heartfelt/lord/archmage
 	name = "Archmagos of Heartfelt"
@@ -115,7 +116,8 @@
 
 	subclass_skills = list(
 		/datum/skill/combat/polearms = SKILL_LEVEL_JOURNEYMAN,
-		/datum/skill/combat/staves = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/staves = SKILL_LEVEL_EXPERT,
+		/datum/skill/combat/arcyne = SKILL_LEVEL_EXPERT,
 		/datum/skill/magic/arcane = SKILL_LEVEL_EXPERT,
 		/datum/skill/craft/alchemy = SKILL_LEVEL_EXPERT,
 		/datum/skill/misc/medicine = SKILL_LEVEL_JOURNEYMAN,
@@ -146,7 +148,7 @@
 	backl = /obj/item/storage/backpack/rogue/satchel // Paper and Feather
 	backpack_contents = list(
 		/obj/item/recipe_book/alchemy,
-		/obj/item/book/spellbook,
+		/obj/item/rogueweapon/spellbook/grand,
 		/obj/item/rogueweapon/huntingknife/idagger/silver/arcyne,
 		/obj/item/natural/feather = 1,
 		/obj/item/paper/scroll = 1,
@@ -243,7 +245,7 @@
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/order/heartfelt/bolster)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/order/heartfelt/charge)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/order/heartfelt/forheartfelt)
-		H.verbs |= list(/mob/living/carbon/human/mind/proc/setordersheartfelt)
+		add_verb(H, list(/mob/living/carbon/human/mind/proc/setordersheartfelt))
 	var/weapons = list("Double-Headed Greataxe", "Great Mace", "Battle Axe + Shield", , "Warhammer + Shield")
 	var/weapon_choice = input(H, "Choose your weapon.", "TAKE UP ARMS") as anything in weapons
 	H.set_blindness(0)
@@ -488,7 +490,7 @@
 
 /mob/living/carbon/human/mind/proc/setordersheartfelt()
     set name = "Rehearse Orders"
-    set category = "Voice of Command"
+    set category = "RoleUnique.Voice of Command"
 
     #define ORDER_INPUT(varname, prompt) \
         mind.varname = input("Send a message.", prompt) as text|null; \

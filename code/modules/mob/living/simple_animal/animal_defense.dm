@@ -221,22 +221,6 @@
 		next_attack_msg.Cut()
 		return TRUE
 
-/mob/living/simple_animal/attack_paw(mob/living/carbon/monkey/M)
-	if(..()) //successful monkey bite.
-		if(stat != DEAD)
-			var/damage = rand(1, 3)
-			var/hitlim = simple_limb_hit(M.zone_selected)
-			var/haha = M.used_intent.item_d_type
-			var/armor = run_armor_check(null, haha, armor_penetration = M.used_intent.penfactor, damage = damage)
-			attack_threshold_check(damage, hitlim, armorcheck = armor)
-	if (M.used_intent.type == INTENT_HELP)
-		if (health > 0)
-			visible_message(span_notice("[M.name] [response_help_continuous] [src]."), \
-							span_notice("[M.name] [response_help_continuous] you."), null, COMBAT_MESSAGE_RANGE, M)
-			to_chat(M, span_notice("I [response_help_simple] [src]."))
-			playsound(loc, 'sound/blank.ogg', 50, TRUE, -1)
-
-
 /mob/living/simple_animal/attack_animal(mob/living/simple_animal/M)
 	. = ..()
 	if(.)
@@ -257,7 +241,7 @@
 	var/damage = 10*(user.STASTR/20)
 	if(HAS_TRAIT(user, TRAIT_STRONGBITE))
 		damage = damage*2
-	playsound(user.loc, "smallslash", 100, FALSE, -1)
+	playsound(user.loc, "smallslash", vol = 50, vary = FALSE, extrarange = -1, ignore_walls = FALSE, quiet = TRUE)
 	user.next_attack_msg.Cut()
 	if(stat == DEAD)
 		if(user.has_status_effect(/datum/status_effect/fire_handler/fire_stacks/sunder))
@@ -284,7 +268,7 @@
 				else
 					user.visible_message(span_warning("[user] drinks from [vampire_victim]!"),\
 					span_warning("I drink from [vampire_victim]!"))
-					playsound(user.loc, 'sound/misc/drink_blood.ogg', 100, FALSE, -4)
+					playsound(user.loc, 'sound/misc/drink_blood.ogg', vol = 50, vary = FALSE, extrarange = -4, ignore_walls = FALSE, quiet = TRUE)
 					vampire_victim.blood_volume -= 100
 					if(bloodleft < 100)
 						vampire_victim.blood_volume = 0

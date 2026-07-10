@@ -1,14 +1,16 @@
 /mob/living/carbon/Initialize()
 	..()
 
-	pain_threshold = STAWIL * 10
-
-	if(HAS_TRAIT(src, TRAIT_NOPAIN))
-		pain_threshold = 250
+	recalculate_pain_threshold()
 
 	create_reagents(1000)
 	update_body_parts() //to update the carbon's new bodyparts appearance
 	GLOB.carbon_list += src
+
+/mob/living/carbon/proc/recalculate_pain_threshold()
+	pain_threshold = STAWIL * 10
+	if(HAS_TRAIT(src, TRAIT_NOPAIN))
+		pain_threshold = 250
 
 /mob/living/carbon/Destroy()
 	//This must be done first, so the mob ghosts correctly before DNA etc is nulled
@@ -256,6 +258,9 @@
 			if(HAS_TRAIT(src, TRAIT_PACIFISM) && I.throwforce)
 				to_chat(src, "<span class='notice'>I set [I] down gently on the ground.</span>")
 				return
+			if(HAS_TRAIT(src, TRAIT_DEADITE)) //Zombies are too stupid to throw things at all...
+				to_chat(src, "<span class='warning'>...What?</span>")
+				return
 
 	if(thrown_thing)
 		if(rogue_sneaking)
@@ -276,6 +281,8 @@
 		playsound(get_turf(src), used_sound, 60, FALSE)
 
 /mob/living/carbon/restrained(ignore_grab = TRUE)
+	if(..())
+		return TRUE
 //	. = (handcuffed || (!ignore_grab && pulledby && pulledby.grab_state >= GRAB_AGGRESSIVE))
 	if(handcuffed)
 		return TRUE
@@ -559,36 +566,17 @@
 			used = 1
 		return used
 
-/mob/living/Stat()
-	..()
-	if(statpanel("Stats"))
-		stat("STR: \Roman [STASTR]")
-		stat("PER: \Roman [STAPER]")
-		stat("INT: \Roman [STAINT]")
-		stat("CON: \Roman [STACON]")
-		stat("WIL: \Roman [STAWIL]")
-		stat("SPD: \Roman [STASPD]")
-		stat("FOR: \Roman [STALUC]")
-		stat("PATRON: [patron]")
-
-/mob/living/carbon/Stat()
-	..()
-	add_abilities_to_panel()
-
 /mob/living/carbon/attack_ui(slot)
 	if(!has_hand_for_held_index(active_hand_index))
 		return 0
 	return ..()
 
-/mob/living/carbon
-	var/nausea = 0
-	var/bleeding_tier = 0
 
 /mob/living/carbon/proc/add_nausea(amt)
 	nausea = clamp(nausea + amt, 0, 300)
 
 /mob/living/carbon/proc/handle_nausea()
-	if(HAS_TRAIT(src, TRAIT_ROTMAN))
+	if(HAS_TRAIT(src, TRAIT_ROTMAN)||HAS_TRAIT(src, TRAIT_IRONMAN))
 		return TRUE
 	if(stat == DEAD)
 		return TRUE
@@ -611,6 +599,9 @@
 
 
 /mob/living/carbon/proc/vomit(lost_nutrition = 50, blood = FALSE, stun = TRUE, distance = 1, message = TRUE, toxic = FALSE, harm = FALSE, force = FALSE)
+	if(HAS_TRAIT(src, TRAIT_IRONMAN))
+		return TRUE
+	
 	if(HAS_TRAIT(src, TRAIT_TOXINLOVER) && !force)
 		return TRUE
 
@@ -783,10 +774,6 @@
 	else
 		remove_movespeed_modifier(MOVESPEED_ID_CARBON_SOFTCRIT, TRUE)
 	SEND_SIGNAL(src, COMSIG_LIVING_HEALTH_UPDATE)
-
-/mob/living/carbon
-	var/lightning_flashing = FALSE
-	var/burn_warning_shown = FALSE
 
 /mob/living/carbon/update_sight()
 	if(!client)

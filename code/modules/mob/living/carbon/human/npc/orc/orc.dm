@@ -7,6 +7,7 @@
 
 	race = /datum/species/orc
 	gender = MALE
+	blood_toll_bucket = STATS_KILLED_ORCS
 	bodyparts = list(/obj/item/bodypart/chest, /obj/item/bodypart/head, /obj/item/bodypart/l_arm,
 					 /obj/item/bodypart/r_arm, /obj/item/bodypart/r_leg, /obj/item/bodypart/l_leg)
 	ambushable = FALSE
@@ -22,6 +23,7 @@
 	cmode_music = FALSE
 
 /mob/living/carbon/human/species/orc/npc/archer
+	threat_point = THREAT_MODERATE // squishier ranged orc; keeps it affordable so warband budgets seat it
 	orc_outfit = /datum/outfit/job/roguetown/orc/npc/archer
 
 /mob/living/carbon/human/species/orc/npc/Initialize()
@@ -43,13 +45,14 @@
 	var/beard = pick(list(/datum/sprite_accessory/hair/facial/viking,
 						/datum/sprite_accessory/hair/facial/manly,
 						/datum/sprite_accessory/hair/facial/longbeard))
-	head.sellprice = 30
+	head.sellprice = HEAD_BOUNTY_ORC
 
 	src.set_patron(/datum/patron/inhumen/graggar)
 	ADD_TRAIT(src, TRAIT_LEECHIMMUNE, INNATE_TRAIT)
 	ADD_TRAIT(src, TRAIT_NOMOOD, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_NOHUNGER, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_BREADY, TRAIT_GENERIC)
+	ADD_TRAIT(src, TRAIT_NPC_EXAMINE, TRAIT_GENERIC)
 
 	var/datum/bodypart_feature/hair/head/new_hair = new()
 	var/datum/bodypart_feature/hair/facial/new_facial = new()
@@ -79,6 +82,8 @@
 	new_facial.accessory_colors = "#31302E"
 	new_facial.hair_color = "#31302E"
 	hair_color = "#31302E"
+
+	random_voice_NPC()
 
 	dna.update_ui_block(DNA_HAIR_COLOR_BLOCK)
 	dna.species.handle_body(src)

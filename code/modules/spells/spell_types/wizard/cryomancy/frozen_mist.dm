@@ -24,7 +24,7 @@
 	charge_required = TRUE
 	weapon_cast_penalized = TRUE
 	charge_time = CHARGETIME_HEAVY
-	charge_drain = 1
+	hold_drain = 1
 	charge_slowdown = CHARGING_SLOWDOWN_HEAVY
 	charge_sound = 'sound/magic/charging.ogg'
 	cooldown_time = 60 SECONDS
@@ -35,7 +35,7 @@
 	spell_requirements = SPELL_REQUIRES_NO_ANTIMAGIC | SPELL_REQUIRES_HUMAN | SPELL_REQUIRES_SAME_Z
 
 	var/mist_duration = 10 SECONDS
-	var/tick_damage = 10
+	var/tick_damage = 9
 	var/mist_radius = 2 // 5x5
 
 /datum/action/cooldown/spell/frozen_mist/cast(atom/cast_on)
@@ -74,7 +74,7 @@
 	var/mob/living/caster
 	var/datum/action/cooldown/spell/source_spell
 	var/ticks_remaining
-	var/tick_damage = 10
+	var/tick_damage = 9
 	var/effect_radius = 2
 	var/list/mist_visuals = list()
 

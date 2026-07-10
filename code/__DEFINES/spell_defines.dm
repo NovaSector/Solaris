@@ -16,6 +16,20 @@
 #define GLOW_COLOR_WARD "#D4A844" // Warm amber-gold, for battlewardry / protective ward spells
 #define GLOW_COLOR_BARDIC "#E8837C" // Warm rose, for bardic songs and cadences
 
+//Gods - Tennite
+#define GLOW_COLOR_UNDIVIDED "#28908C" //Undivided Cyan
+#define GLOW_COLOR_ASTRATA "#F9B362" //Astratan Yellow/Orange
+#define GLOW_COLOR_NOC "#9acdff" //Noc's lightbulb
+#define GLOW_COLOR_RAVOX "#7A1E30" //Ravox Crimson
+#define GLOW_COLOR_MALUM "#884610" //Malum Orange
+
+//Gods - Ascendant
+#define GLOW_COLOR_GRAGGAR "#19345E" //Graggar Dark Blue
+#define GLOW_COLOR_ZIZO "#b76bff" //Graggar Dark Purple
+#define GLOW_COLOR_BAOTHA "#ff008c" //Baotha Violent Rose
+#define GLOW_COLOR_MATTHIOS "#ffd900" //Matthios Golden
+
+
 // Constants for spell glow intensity. These are literally 1 2 3 4 but it is for documenting design purposes
 #define GLOW_INTENSITY_LOW 1 // For spam projectiles or generic buffs
 #define GLOW_INTENSITY_MEDIUM 2 // Anything that would hurt quite a bit
@@ -49,19 +63,25 @@
 #define SPELLCOST_MINOR_AOE          15
 #define SPELLCOST_MAJOR_AOE          30
 #define SPELLCOST_SINGLE_CC          30
-#define SPELLCOST_UTILITY_BUFF       20
-#define SPELLCOST_STAT_BUFF          40
+#define SPELLCOST_UTILITY_BUFF       5 // See below
+#define SPELLCOST_STAT_BUFF          5 // With new Augmentation design we don't really need to gate this hard anymore
 #define SPELLCOST_CONJURE            20	
 #define SPELLCOST_TELEPORT           15
 #define SPELLCOST_MINOR_SUMMON       30
 #define SPELLCOST_MAJOR_SUMMON       50
 // Buff duration tiers
 #define STAT_BUFF_SELF_DURATION      1 MINUTES
-#define STAT_BUFF_ALLY_DURATION      2.5 MINUTES
+#define STAT_BUFF_ALLY_DURATION      1 MINUTES
 #define UTILITY_AOE_BUFF_DURATION    15 MINUTES
 
+//Miracle costs in devotion used.
+#define SPELLCOST_MIRACLE_ORISON	 5
+#define SPELLCOST_MIRACLE_MINOR		 15
 #define SPELLCOST_MIRACLE            30
 #define SPELLCOST_MIRACLE_MAJOR      60
+#define SPELLCOST_MIRACLE_LEGENDARY  100 //Highest tiers of miracles should have this.
+
+
 #define SPELLCOST_MINOR_SKILL        30
 #define SPELLCOST_MAJOR_SKILL        50
 
@@ -69,6 +89,8 @@
 #define SPELLCOST_SB_POKE 12 // Roughly 3 attacks worth
 #define SPELLCOST_SB_MOBILITY 12 // Dashes / Teleports / Anchor
 #define SPELLCOST_SB_ULT 50 // Their ult
+
+#define SPELLCOST_FORM_BLADE 30
 
 // Standardized charge times — keeps poke/major/heavy spells consistent for balance passes
 #define CHARGETIME_POKE          0.5 SECONDS  // Staple poke spells
@@ -85,6 +107,8 @@
 // Standardized spell ranges
 #define SPELL_RANGE_PROJECTILE 10  // Standard projectile travel distance and projectile spell cast range
 #define SPELL_RANGE_GROUND     7   // Standard ground-targeted / AOE spell cast range
+#define SPELL_RANGE_AURA	   4   // For 'warcry' type miracles or AOE BUFFS originating on the caster
+#define SPELL_RANGE_ADJACENT   1   // Self explanatory
 
 // Charging slowdown tiers — how much the caster is slowed while charging
 #define CHARGING_SLOWDOWN_NONE 0       // Spellblade abilities, no movement penalty
@@ -146,7 +170,7 @@
 #define WEAPON_CAST_PENALTY 0.3
 
 // Leyline teleportation matrix passenger limits
-#define TELEPORT_MAX_PASSENGERS 5
+#define TELEPORT_MAX_PASSENGERS 6
 #define TELEPORT_MAX_NONMAGES 2
 
 // Spell implement tiers and multipliers

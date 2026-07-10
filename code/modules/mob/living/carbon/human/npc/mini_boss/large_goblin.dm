@@ -12,6 +12,7 @@ GLOBAL_LIST_INIT(large_goblin_aggro, list(
 ))
 
 /mob/living/carbon/human/species/goblin/npc/large
+	threat_point = THREAT_ELITE
 	name = "unusually large goblin"
 	gob_outfit = /datum/outfit/job/roguetown/npc/mini_boss/large_goblin
 	faction = list(FACTION_DUNDEAD, FACTION_ORCS)
@@ -21,8 +22,6 @@ GLOBAL_LIST_INIT(large_goblin_aggro, list(
 /mob/living/carbon/human/species/goblin/npc/large/after_creation()
 	..()
 	SEND_SIGNAL(src, COMSIG_MOB_MODIFY_AGGRO_LINES, GLOB.large_goblin_aggro, TRUE)
-	name = pick("Big Grug", "Massive Gronk", "Huge Blort", "Giant Snik", "Enormous Gak", "Colossal Muk")
-	real_name = name
 	ADD_TRAIT(src, TRAIT_BIGGUY, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_NOMOOD, TRAIT_GENERIC)
@@ -30,6 +29,9 @@ GLOBAL_LIST_INIT(large_goblin_aggro, list(
 	ADD_TRAIT(src, TRAIT_LEECHIMMUNE, INNATE_TRAIT)
 	ADD_TRAIT(src, TRAIT_BREADY, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_CRITICAL_RESISTANCE, TRAIT_GENERIC)
+	ADD_TRAIT(src, TRAIT_NOPAIN, TRAIT_GENERIC)
+	ADD_TRAIT(src, TRAIT_NOPAINSTUN, TRAIT_GENERIC)
+	ADD_TRAIT(src, TRAIT_NPC_EXAMINE, TRAIT_GENERIC)
 	src.transform = src.transform.Scale(1.25, 1.25)
 	src.pixel_y += round(0.25 * 16)
 	for(var/obj/item/equipped_item in get_equipped_items() + held_items)
@@ -41,6 +43,18 @@ GLOBAL_LIST_INIT(large_goblin_aggro, list(
 	. = ..()
 	if(!gibbed)
 		dust(FALSE, FALSE, TRUE)
+
+/mob/living/carbon/human/species/goblin/npc/large/hell
+	race = /datum/species/goblin/hell
+
+/mob/living/carbon/human/species/goblin/npc/large/moon
+	race = /datum/species/goblin/moon
+
+/mob/living/carbon/human/species/goblin/npc/large/cave
+	race = /datum/species/goblin/cave
+
+/mob/living/carbon/human/species/goblin/npc/large/sea
+	race = /datum/species/goblin/sea
 
 /datum/outfit/job/roguetown/npc/mini_boss/large_goblin/pre_equip(mob/living/carbon/human/H)
 	..()

@@ -110,10 +110,8 @@
 	var/datum/rmb_intent/rmb_intent //Living
 	var/datum/intent/used_intent
 	var/datum/intent/mmb_intent
-	var/datum/intent/used_rmb_intent
 	/// List of possible intents a mob can have
 	var/list/possible_mmb_intents = list()
-	var/list/possible_spell_intents = list()
 	var/list/possible_a_intents = list()//Living
 	var/list/possible_offhand_intents = list()//Living
 	var/list/possible_rmb_intents = list()
@@ -243,6 +241,7 @@
 	var/datum/hSB/sandbox = null
 
 	var/bloody_hands = 0
+	var/bloody_hands_color
 
 	var/datum/focus //What receives our keyboard inputs. src by default
 
@@ -296,7 +295,7 @@
 	var/mobid = 0 //incremented on spawn
 
 	var/cmode = 0
-	var/d_intent = INTENT_DODGE
+	var/d_intent = INTENT_PARRY
 	var/islatejoin = FALSE
 	var/obj/effect/proc_holder/ranged_ability //Any ranged ability the mob has, as a click override
 
@@ -313,12 +312,12 @@
 	///////TYPING INDICATORS///////
 	/// Set to true if we want to show typing indicators.
 	var/typing_indicator_enabled = FALSE
-	/// Default icon_state of our typing indicator. Currently only supports paths (because anything else is, as of time of typing this, unnecesary.
-	var/typing_indicator_state = /obj/effect/overlay/typing_indicator
 	/// The timer that will remove our indicator for early aborts (like when an user finishes their message)
 	var/typing_indicator_timerid
-	/// Current state of our typing indicator. Used for cut overlay, DO NOT RUNTIME ASSIGN OTHER THAN FROM SHOW/CLEAR. Used to absolutely ensure we do not get stuck overlays.
-	var/mutable_appearance/typing_indicator_current
+	/// The shared typing indicator currently attached to our vis_contents, or null if not typing. DO NOT RUNTIME ASSIGN OTHER THAN FROM SHOW/CLEAR.
+	var/obj/effect/overlay/typing_indicator/typing_indicator_current
+	/// TRUE if we set KEEP_TOGETHER on the mob to make the indicator follow our transform (and need to clear it on stop).
+	var/typing_indicator_added_keep_together = FALSE
 
 	// The last tick where we manually moved, or clicked on something in-world. Useful for preventing abuse of mobs with AFK players.
 	var/last_client_interact = 0
