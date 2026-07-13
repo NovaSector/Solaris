@@ -61,6 +61,8 @@
 			attacker = I.thrownby
 	if(attack_type == PROJECTILE_ATTACK)
 		var/obj/projectile/P = hitby
+		if(istype(P, /obj/projectile/bullet/solaris)) // Musket bullets penetrate shields
+			return FALSE
 		if(P?.firer)
 			attacker = P.firer
 	if(attacker && istype(attacker))

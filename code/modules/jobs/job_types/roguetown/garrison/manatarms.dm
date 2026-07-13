@@ -196,7 +196,7 @@
 
 	H.adjust_blindness(-3)
 	if(H.mind)
-		var/weapons = list("Crossbow","Bow","Sling")
+		var/weapons = list("Crossbow","Bow","Sling","Handgonner")
 		var/weapon_choice = input(H, "Choose your weapon.", "TAKE UP ARMS") as anything in weapons
 		var/armor_options = list("Leather Armor", "Brigandine Armor")
 		var/armor_choice = input(H, "Choose your armor.", "TAKE UP ARMS") as anything in armor_options
@@ -211,6 +211,8 @@
 			if("Sling")
 				beltr = /obj/item/quiver/sling/iron
 				r_hand = /obj/item/gun/ballistic/revolver/grenadelauncher/sling // Both are belt slots and it's not worth setting where the cugel goes for everyone else, sad.
+			if("Handgonner") // Solaris-owned: see modular_solaris/.../garrison/manatarms.dm for the actual loadout.
+				equip_handgonner(H)
 
 		switch(armor_choice)
 			if("Leather Armor") //OG more or less RT guardsman archer
