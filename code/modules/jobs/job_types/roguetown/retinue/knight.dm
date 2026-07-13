@@ -28,7 +28,8 @@
 		/datum/advclass/knight/footknight,
 		/datum/advclass/knight/mountedknight,
 		/datum/advclass/knight/irregularknight,
-		/datum/advclass/knight/knightchampion
+		/datum/advclass/knight/knightchampion,
+		/datum/advclass/knight/reiter
 		)
 
 /datum/outfit/job/roguetown/knight
