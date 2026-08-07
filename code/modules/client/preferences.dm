@@ -2,6 +2,8 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 
 GLOBAL_LIST_EMPTY(chosen_names)
 
+#define MAX_SONG_TITLE_LENGTH 60
+
 /datum/preferences
 	var/client/parent
 	//doohickeys for savefiles
@@ -123,6 +125,8 @@ GLOBAL_LIST_EMPTY(chosen_names)
 
 	//Job preferences 2.0 - indexed by job title , no key or value implies never
 	var/list/job_preferences = list()
+	/// Preferences specific to a job. Alist, job title = (some object, usually a list)
+	var/list/job_subprefs = list()
 
 		// Want randomjob if preferences already filled - Donkie
 	var/joblessrole = RETURNTOLOBBY  //defaults to 1 for fewer assistants
@@ -168,8 +172,6 @@ GLOBAL_LIST_EMPTY(chosen_names)
 
 	var/datum/migrant_pref/migrant
 	var/next_special_trait = null
-
-	var/action_buttons_screen_locs = list()
 
 	var/domhand = 2
 	var/nickname = "Please Change Me"
@@ -226,8 +228,9 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	var/taur_type = null
 	var/taur_color = "ffffff"
 
-	/// Assoc list of culinary preferences, where the key is the type of the culinary preference, and value is food/drink typepath
-	var/list/culinary_preferences = list()
+	var/favorite_cuisine = NONE
+	var/favorite_dish = NONE
+	var/favorite_drink = NONE
 
 
 	var/tgui_pref = TRUE
@@ -255,7 +258,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	var/examine_theme
 
 	/// Whether we can see the feint HUD bar.
-	var/feint_hud = FALSE 
+	var/feint_hud = FALSE
 
 	// Vocal bark prefs
 	var/bark_id = "mutedc3"
@@ -492,7 +495,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 				dat += "<b>Race Bonus:</b> <a href='?_src_=prefs;preference=race_bonus_select;task=input'>[race_bonus_display ? "[race_bonus_display]" : "None"]</a><BR>"
 			else
 				race_bonus = null
-			
+
 			var/datum/language/selected_lang
 			var/lang_output = "None"
 			if(ispath(extra_language, /datum/language))
@@ -622,7 +625,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 				if(istype(cf, /datum/charflaw/averse))
 					has_averse = TRUE
 					break
-			
+
 			if(has_averse)
 				if(!averse_chosen_faction)
 					averse_chosen_faction = "Inquisition"
@@ -1054,6 +1057,9 @@ GLOBAL_LIST_EMPTY(chosen_names)
 					var/restrict_text = english_list(restricted_list)
 					HTML += "<font color='#a56161'>[used_name] (Disallowed by Vice: [restrict_text])</font></td> <td> </td></tr>"
 					continue
+			if(job.prefs_all_subclasses_restricted(user.client))
+				HTML += "<font color='#a561a5'>[used_name] (Disallowed by Subclass Virtues / Vice)</font></td> <td> </td></tr>"
+				continue
 			var/job_unavailable = JOB_AVAILABLE
 			if(isnewplayer(parent?.mob))
 				var/mob/dead/new_player/new_player = parent.mob
@@ -1109,7 +1115,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 }
 
 </style>
-
+[job.has_subprefs ? "<div class='tutorialhover'><a href='?src=[REF(job)];subprefs=1'>\[+\]</a><span class='tutorial'>Class Preferences</span></div>" : ""]
 <div class="tutorialhover"> [job.class_setup_examine ? "<a href='?src=[REF(job)];explainjob=1'><font>[job_display]</font></a>" : "<font>[job_display]</font>"]</span>
 <span class="tutorial">[job.tutorial]<br>
 Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contrib_points]" : ""]</span>
@@ -1377,7 +1383,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 
 		dat += "<br><b>Crime:</b> "
 		dat += "<a href='?_src_=prefs;preference=preset_bounty_crime;task=input'>\
-			[preset_bounty_crime || "None"]\
+			[html_encode(preset_bounty_crime) || "None"]\
 		</a>"
 	if(preset_bounty_severity_key && !GLOB.wretch_severities[preset_bounty_severity_key])
 		preset_bounty_severity_key = null
@@ -1706,7 +1712,6 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 			return
 		if("change_culinary_preferences")
 			handle_culinary_topic(user, href_list)
-			show_culinary_ui(user)
 			return
 		if("random")
 			switch(href_list["preference"])
@@ -1774,7 +1779,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 						else
 							to_chat(user, "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ', . and ,.</font>")
 
-	
+
 				if("nickname")
 					var/new_name = tgui_input_text(user, "Choose your character's nickname (For Highlighting):", "NICKNAME",  encode = FALSE)
 					if(new_name)
@@ -1914,9 +1919,10 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 					var/faith_input = tgui_input_list(user, "The world rots. Which truth you bear?", "FAITH", faiths_named)
 					if(faith_input)
 						var/datum/faith/faith = faiths_named[faith_input]
-						to_chat(user, "<font color='yellow'>Faith: [faith.name]</font>")
-						to_chat(user, "Background: [faith.desc]")
-						to_chat(user, "<font color='red'>Likely Worshippers: [faith.worshippers]</font>")
+						var/pantheon_info = "[faith.desc]<br><br>"
+						pantheon_info += span_redtext("Likely worshippers: " + faith.worshippers)
+						var/pantheon_fieldsetblock = fieldset_block(span_big("<b>[span_bignotice(faith.name)]</b>"), pantheon_info, "faithdesc_block")
+						to_chat(user, pantheon_fieldsetblock)
 						selected_patron = GLOB.patronlist[faith.godhead] || GLOB.patronlist[pick(GLOB.patrons_by_faith[faith_input])]
 
 				if("patron")
@@ -1929,10 +1935,12 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 					var/god_input = tgui_input_list(user, "The first amongst many.", "PATRON", patrons_named)
 					if(god_input)
 						selected_patron = patrons_named[god_input]
-						to_chat(user, "<font color='yellow'>Patron: [selected_patron]</font>")
-						to_chat(user, "<font color='#FFA500'>Domain: [selected_patron.domain]</font>")
-						to_chat(user, "Background: [selected_patron.desc]")
-						to_chat(user, "<font color='red'>Likely Worshippers: [selected_patron.worshippers]</font>")
+						var/patron_info = ""
+						patron_info += span_honeyyellow("Domain: [selected_patron.domain]<br><br>")
+						patron_info += "[selected_patron.desc]<br><br>"
+						patron_info += span_redtext("Likely Worshippers: [selected_patron.worshippers]")
+						var/patron_fieldsetblock = fieldset_block(span_big("<b>[span_bignotice(selected_patron.name)]</b>"), patron_info, "patrondesc_block")
+						to_chat(user, patron_fieldsetblock)
 
 				if("combat_music") // if u change shit here look at /client/verb/combat_music() too
 					if(!combat_music_helptext_shown)
@@ -2411,7 +2419,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 					log_game("[user] has set their song artist.")
 
 				if("change_title")
-					var/new_title = tgui_input_text(user, "Input your song's title:", "Song title", song_title,  encode = FALSE)
+					var/new_title = tgui_input_text(user, "Input your song's title (Character limit is [MAX_SONG_TITLE_LENGTH]):", "Song title", song_title,  encode = FALSE, max_length = MAX_SONG_TITLE_LENGTH)
 					if(new_title== null)
 						return
 					if(new_title == "")
@@ -2631,6 +2639,8 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 						if (istype(V, /datum/virtue/origin/racial))
 							if(!(pref_species.type in V.races))
 								continue
+						if (istype(V, /datum/virtue/origin/familiar))
+							continue
 						virtue_choices[V.name] = V
 					var/result = tgui_input_list(user, "From where do you come?", "ORIGINS",virtue_choices)
 
@@ -3182,7 +3192,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 	character.ooc_notes = ooc_notes
 	character.nsfwflavortext = nsfwflavortext
 	character.erpprefs = erpprefs
-	
+
 	// Copy the cached version
 	character.flavortext_cached = flavortext_cached
 	character.ooc_notes_cached = ooc_notes_cached
@@ -3240,8 +3250,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 	// Customizers are already applied inside set_species() (both the species-change path via
 	// on_species_gain, and the same-species short-circuit). Re-applying here doubled the work.
 
-	if(culinary_preferences)
-		apply_culinary_preferences(character)
+	apply_culinary_preferences(character)
 
 /datum/preferences/proc/get_default_name(name_id)
 	switch(name_id)
@@ -3387,7 +3396,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 		dat += "[V.custom_text]"
 		dat += "</font>"
 	if(V.stackable)
-		dat += "<font color = '#ffeea3'>This virtue can be picked twice using Virtuous.</font><br>"
+		dat += "<font color = '#ffeea3'><br>This virtue can be picked twice using Virtuous.</font><br>"
 	return dat
 
 /datum/preferences/proc/LorePopup(mob/user)
@@ -3396,3 +3405,5 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 	var/datum/browser/noclose/popup  = new(user, "lore_primer", "<div align='center'>Lore Primer</div>", 650, 900)
 	popup.set_content(build_lore_primer_content())
 	popup.open(FALSE)
+
+#undef MAX_SONG_TITLE_LENGTH
