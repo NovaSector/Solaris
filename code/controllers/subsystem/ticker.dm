@@ -742,9 +742,6 @@ SUBSYSTEM_DEF(ticker)
 		world.Reboot()
 
 /datum/controller/subsystem/ticker/Shutdown()
-	save_admin_data()
-	update_everything_flag_in_db()
-
 	text2file(login_music, "data/last_round_lobby_music.txt")
 
 /// Wrapper for setting rulermob and rulertype
