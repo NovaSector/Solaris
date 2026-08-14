@@ -198,7 +198,7 @@ SUBSYSTEM_DEF(job)
 			JobDebug("FOC player did not pass special check, Player: [player], Job:[job.title]")
 			continue
 		if(CONFIG_GET(flag/usewhitelist))
-			if(job.whitelist_req && (!player.client.whitelisted()))
+			if(job.whitelist_req && !check_whitelist(player.client.ckey))
 				continue
 		if(player.client.prefs.job_preferences[job.title] == level)
 			JobDebug("FOC pass, Player: [player], Level:[level]")
@@ -297,7 +297,7 @@ SUBSYSTEM_DEF(job)
 			continue
 
 		if(CONFIG_GET(flag/usewhitelist))
-			if(job.whitelist_req && (!player.client.whitelisted()))
+			if(job.whitelist_req && !check_whitelist(player.client.ckey))
 				continue
 
 //		if((player.client.prefs.lastclass == job.title) && (!job.bypass_lastclass))
@@ -537,7 +537,7 @@ SUBSYSTEM_DEF(job)
 					continue
 
 				if(CONFIG_GET(flag/usewhitelist))
-					if(job.whitelist_req && (!player.client.whitelisted()))
+					if(job.whitelist_req && !check_whitelist(player.client.ckey))
 						continue
 
 				if(length(job.allowed_ages) && !(player.client.prefs.age in job.allowed_ages))
@@ -638,7 +638,7 @@ SUBSYSTEM_DEF(job)
 					continue
 
 				if(CONFIG_GET(flag/usewhitelist))
-					if(job.whitelist_req && (!player.client.whitelisted()))
+					if(job.whitelist_req && !check_whitelist(player.client.ckey))
 						continue
 
 				if(length(job.allowed_ages) && !(player.client.prefs.age in job.allowed_ages))

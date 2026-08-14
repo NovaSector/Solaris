@@ -293,7 +293,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 	if(!job)
 		return JOB_UNAVAILABLE_GENERIC
 	if(CONFIG_GET(flag/usewhitelist))
-		if(job.whitelist_req && !client.whitelisted())
+		if(job.whitelist_req && !check_whitelist(client.ckey))
 			return JOB_UNAVAILABLE_GENERIC
 	if(!job.bypass_jobban)
 		if(is_banned_from(ckey, rank))
