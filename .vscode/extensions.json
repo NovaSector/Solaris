@@ -1,9 +1,11 @@
 {
     "recommendations": [
-        "gbasood.byond-dm-language-support",
         "platymuus.dm-langclient",
         "EditorConfig.EditorConfig",
         "esbenp.prettier-vscode",
-        "biomejs.biome"
+        "biomejs.biome",
+        "stylemistake.auto-comment-blocks",
+        "Donkie.vscode-tgstation-test-adapter",
+        "anturk.dmi-editor"
     ]
 }
