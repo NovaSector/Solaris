@@ -368,7 +368,7 @@
 
 /datum/action/cooldown/spell/earthen_forge
 	name = "Earthen Forge"
-	desc = "Shape your earthen form into a tool or weapon. When the item breaks, you will revert to your original form. Cast again to manually revert."
+	desc = "Shape your earthen form into a tool or weapon. When the item breaks, you will revert to your original form. Resist to manually revert."
 	spell_requirements = SPELL_REQUIRES_NO_ANTIMAGIC | SPELL_REQUIRES_SAME_Z
 
 	button_icon = 'icons/mob/actions/mage_conjure.dmi'
