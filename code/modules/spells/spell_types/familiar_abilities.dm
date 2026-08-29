@@ -209,7 +209,7 @@
 	user.should_brew = !user.should_brew
 	return TRUE
 
-/datum/action/cooldown/spell/projectile/lesser_fetch/fae
+/datum/action/cooldown/spell/projectile/fetch/fae
 	name = "Grasp of Nature"
 	desc = "Shoot out a grasping vine that draws in a freestanding item towards the caster. Doesn't work on living targets."
 	invocations = list("Recolligere silva")
@@ -368,7 +368,7 @@
 
 /datum/action/cooldown/spell/earthen_forge
 	name = "Earthen Forge"
-	desc = "Shape your earthen form into a tool or weapon. When the item breaks, you will revert to your original form. Cast again to manually revert."
+	desc = "Shape your earthen form into a tool or weapon. When the item breaks, you will revert to your original form. Resist to manually revert."
 	spell_requirements = SPELL_REQUIRES_NO_ANTIMAGIC | SPELL_REQUIRES_SAME_Z
 
 	button_icon = 'icons/mob/actions/mage_conjure.dmi'
@@ -505,7 +505,7 @@
 
 /datum/action/cooldown/spell/earthen_forge/void // lmao
 	name = "Void Forge"
-	desc = "Shape your ever-malleable form into a tool or weapon. When the item breaks, you will revert to your original form. Cast again to manually revert."
+	desc = "Shape your ever-malleable form into a tool or weapon. When the item breaks, you will revert to your original form. Resist to manually revert."
 
 /datum/action/cooldown/spell/arcyne_forge/elementalt2
 	name = "Greater Earthen Shaping"
@@ -700,7 +700,7 @@
 			beam.disperse()
 		user.beam_parts = list()
 
-/datum/action/cooldown/spell/projectile/lesser_fetch/fae/void
+/datum/action/cooldown/spell/projectile/fetch/fae/void
 	name = "Grasp of the Void"
 	desc = "Grasp a freestanding item with your arcyne power, drawing it towards you. Doesn't work on living targets."
 	invocations = list("Nihilo, recolligere")
