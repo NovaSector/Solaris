@@ -32,6 +32,7 @@ GLOBAL_PROTECT(admin_verbs_default)
 	/client/proc/check_antagonists,
 	/client/proc/admin_force_next_migrant_wave,
 	/client/proc/cmd_admin_say,
+	/client/proc/cmd_loud_admin_say,
 	/client/proc/deadmin,				/*destroys our own admin datum so we can play as a regular player*/
 	/client/proc/set_context_menu_enabled,
 	/client/proc/delete_player_book,
@@ -51,6 +52,7 @@ GLOBAL_PROTECT(admin_verbs_admin)
 	/client/proc/adjusttriumph,
 	/client/proc/end_party,
 	/client/proc/cmd_admin_say,			/*admin-only ooc chat*/
+	/client/proc/cmd_loud_admin_say,
 	/client/proc/toggle_lobby_ooc,
 	/client/proc/hide_verbs,			/*hides all our adminverbs*/
 	/client/proc/hide_most_verbs,		/*hides all our hideable adminverbs*/
