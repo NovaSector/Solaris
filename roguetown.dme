@@ -3723,6 +3723,7 @@
 #include "modular_solaris\code\game\objects\items\rogueweapons\ranged\ammo.dm"
 #include "modular_solaris\code\game\objects\items\rogueweapons\ranged\arquebus.dm"
 #include "modular_solaris\code\game\objects\items\rogueweapons\ranged\handgonne.dm"
+#include "modular_solaris\code\modules\admin\delay_pregame_on_reboot.dm"
 #include "modular_solaris\code\modules\clothing\rogueclothes\ammopouch.dm"
 #include "modular_solaris\code\modules\jobs\job_types\roguetown\adventurer\types\antag\smokerat.dm"
 #include "modular_solaris\code\modules\jobs\job_types\roguetown\adventurer\types\combat\ranger.dm"

@@ -126,6 +126,7 @@ SUBSYSTEM_DEF(ticker)
 		GLOB.syndicate_code_response_regex = codeword_match
 
 	start_at = world.time + (CONFIG_GET(number/lobby_countdown) * 10)
+	apply_scheduled_pregame_delay() // modular_solaris/code/modules/admin/delay_pregame_on_reboot.dm
 	// Offset time drift but start right in the morning of Monday.
 	gametime_offset = 288001
 	return ..()
