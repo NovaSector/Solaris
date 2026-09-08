@@ -34,6 +34,7 @@
 	casing_ejector = FALSE
 	pickup_sound = 'modular_solaris/sound/sheath_sounds/draw_from_holster.ogg'
 	equip_sound = 'modular_solaris/sound/sheath_sounds/put_back_to_holster.ogg'
+	wdefense = 5
 	var/spread_num = 10
 	var/damfactor = 1.5
 	var/reloaded = FALSE
@@ -227,13 +228,13 @@
 	if(mastermob && chargetime)
 		var/newtime = chargetime
 		//skill block
-		newtime = newtime + 240
+		newtime = newtime + 120
 		newtime = newtime - (mastermob.get_skill_level(/datum/skill/combat/firearms) * 25)
 		//per blockaaw
 		newtime = newtime + 20
 		newtime = newtime - ((mastermob.STAPER)*2)
-		if(newtime > 0)
+		if(newtime > 3)
 			return newtime
 		else
-			return 1
+			return 3
 	return chargetime

@@ -101,3 +101,13 @@
 	name = "Net"
 	cost = 20
 	contains = list(/obj/item/net)
+
+/datum/supply_pack/rogue/ranged_weapons/shotpouch
+	name = "Pouch of Musketballs"
+	cost = 70 // 40 lead cartridges, priced per-unit like Quiver of Arrows (35/20)
+	contains = list(/obj/item/ammopouch/bullets)
+
+/datum/supply_pack/rogue/ranged_weapons/shotpouch/steel
+	name = "Pouch of Steel Shot"
+	cost = 200 // 40 steel cartridges, priced per-unit like Quiver of Bodkin Arrows (100/20)
+	contains = list(/obj/item/ammopouch/bullets/steel)

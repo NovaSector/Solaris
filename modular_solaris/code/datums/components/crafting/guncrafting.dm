@@ -1,5 +1,5 @@
 /obj/item/weaponcrafting/receiver
-	name = "firearm"
+	name = "firearm parts"
 	desc = ""
 	icon = 'modular_solaris/icons/obj/improvised/receiver.dmi'
 	icon_state = "receiver"
