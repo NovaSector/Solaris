@@ -23,6 +23,7 @@
 	randomspread = 1
 	spread = 0
 	can_parry = TRUE
+	associated_skill = /datum/skill/combat/firearms
 	minstr = 6
 	walking_stick = TRUE
 	experimental_onback = TRUE
@@ -269,6 +270,7 @@
 	randomspread = 1
 	spread = 0
 	can_parry = TRUE
+	associated_skill = /datum/skill/combat/firearms
 	minstr = 6
 	walking_stick = FALSE
 	cartridge_wording = "musketball"
