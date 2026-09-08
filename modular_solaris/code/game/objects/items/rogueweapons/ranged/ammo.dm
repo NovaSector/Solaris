@@ -26,6 +26,13 @@
 	npc_simple_damage_mult = 3
 	speed = 0.1
 
+// 70% of hits keep the bullet's normal piercing/stab wound (bleeding); the other 30%
+// land as a blunt impact instead, which can crit into a fracture like a mace blow would.
+/obj/projectile/bullet/solaris/on_hit(atom/target, blocked = FALSE)
+	if(isliving(target))
+		woundclass = prob(70) ? initial(woundclass) : BCLASS_BLUNT
+	return ..()
+
 /obj/item/ammo_casing/caseless/rogue/bullet/solaris
 	name = "lead shot paper cartridge"
 	desc = "A lead ball shot with pre-measured powder packed into a paper cartridge for ease of loading."
