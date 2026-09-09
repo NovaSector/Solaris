@@ -1,4 +1,5 @@
 /obj/item/gun/ballistic/handgonne
+	parent_type = /obj/item/gun/ballistic/muzzleloader
 	name = "handgonne"
 	desc = "A gunpowder weapon that shoots an armor piercing metal ball. There is a ramrod tucked underneath the barrel.  Right click to pull it out."
 	icon = 'icons/roguetown/weapons/64.dmi'
@@ -38,7 +39,6 @@
 	wdefense = 5
 	var/spread_num = 10
 	var/damfactor = 1.5
-	var/reloaded = FALSE
 	var/load_time = 40
 	var/obj/item/ramrod/myrod = null
 	var/gunchannel

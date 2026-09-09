@@ -1,5 +1,6 @@
 //By HELMSGUARD, by Stoned Elf https://github.com/Feralape
 /obj/item/gun/ballistic/arquebus
+	parent_type = /obj/item/gun/ballistic/muzzleloader
 	name = "arquebus rifle"
 	desc = "A gunpowder weapon that shoots an armor piercing metal ball. There is a ramrod tucked underneath the barrel.  Right click to pull it out."
 	icon = 'modular_solaris/icons/roguetown/weapons/arquebus.dmi'
@@ -39,7 +40,6 @@
 	wdefense = 8
 	var/spread_num = 10
 	var/damfactor = 2.5
-	var/reloaded = FALSE
 	var/load_time = 40
 	var/obj/item/ramrod/myrod = null
 	var/gunchannel
@@ -257,6 +257,7 @@
 
 /// PISTOLS
 /obj/item/gun/ballistic/arquebus_pistol
+	parent_type = /obj/item/gun/ballistic/muzzleloader
 	name = "arquebus pistol"
 	desc = "A gunpowder weapon that shoots an armor piercing metal ball. There is a ramrod tucked underneath the barrel.  Right click to pull it out."
 	icon = 'modular_solaris/icons/roguetown/weapons/arquebus_pistol.dmi'
@@ -285,7 +286,6 @@
 	equip_sound = 'modular_solaris/sound/sheath_sounds/put_back_to_holster.ogg'
 	slot_flags = ITEM_SLOT_HIP
 	var/damfactor = 2
-	var/reloaded = FALSE
 	var/load_time = 35
 	var/obj/item/ramrod/myrod = null
 	var/spread_num = 10

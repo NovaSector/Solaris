@@ -3721,6 +3721,7 @@
 #include "modular_solaris\code\game\objects\effects\effect_system\effects_smoke.dm"
 #include "modular_solaris\code\game\objects\items\rogueweapons\melee\polearms\polearms.dm"
 #include "modular_solaris\code\game\objects\items\rogueweapons\ranged\ammo.dm"
+#include "modular_solaris\code\game\objects\items\rogueweapons\ranged\muzzleloader.dm"
 #include "modular_solaris\code\game\objects\items\rogueweapons\ranged\arquebus.dm"
 #include "modular_solaris\code\game\objects\items\rogueweapons\ranged\handgonne.dm"
 #include "modular_solaris\code\modules\admin\delay_pregame_on_reboot.dm"
