@@ -159,12 +159,10 @@
 
 	playsound(src, "modular_solaris/sound/arquebus/fuse.ogg", 100)
 	..()
+	var/fire_dir = user.dir
+	var/turf/smoke_loc = get_ranged_target_turf(user, fire_dir, 1)
 	spawn (1)
-		new/obj/effect/particle_effect/smoke/arquebus(get_ranged_target_turf(user, user.dir, 1))
-	spawn (5)
-		new/obj/effect/particle_effect/smoke/arquebus(get_ranged_target_turf(user, user.dir, 2))
-	spawn (12)
-		new/obj/effect/particle_effect/smoke/arquebus(get_ranged_target_turf(user, user.dir, 1))
+		new/obj/effect/particle_effect/smoke/arquebus(smoke_loc, fire_dir)
 	for(var/mob/M in range(5, user))
 		if(!M.stat)
 			shake_camera(M, 3, 1)
