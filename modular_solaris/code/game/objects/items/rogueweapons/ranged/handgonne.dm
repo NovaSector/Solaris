@@ -95,6 +95,8 @@
 	update_icon()
 
 /obj/item/gun/ballistic/handgonne/attackby(obj/item/A, mob/user, params)
+	if(!istype(A, /obj/item/ammo_box) && !istype(A, /obj/item/ammo_casing) && !istype(A, /obj/item/ramrod))
+		return ..()
 	user.stop_sound_channel(gunchannel)
 	var/firearm_skill = (user ? user.get_skill_level(/datum/skill/combat/firearms) : 1)
 	var/load_time_skill = load_time - (firearm_skill*3)
