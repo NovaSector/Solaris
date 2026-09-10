@@ -6,6 +6,7 @@
 	icon_state = "detective"
 	item_state = "gun"
 	flags_1 =	CONDUCT_1
+	obj_flags = CAN_BE_HIT
 	slot_flags = ITEM_SLOT_BELT
 	w_class = WEIGHT_CLASS_NORMAL
 	possible_item_intents = list(INTENT_GENERIC, RANGED_FIRE)

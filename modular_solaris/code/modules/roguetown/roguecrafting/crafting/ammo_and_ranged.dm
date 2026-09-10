@@ -57,3 +57,10 @@
 	)
 	skillcraft = /datum/skill/craft/blacksmithing
 	craftdiff = 4
+
+/datum/crafting_recipe/roguetown/leather/container/gonneshotpouch
+	name = "Gonne Shot Pouch"
+	result = /obj/item/ammopouch
+	reqs = list(/obj/item/natural/hide/cured = 2,
+				/obj/item/natural/fibers = 1)
+	craftdiff = 1

@@ -14,7 +14,7 @@
 	bloody_icon_state = "bodyblood"
 	alternate_worn_layer = UNDER_CLOAK_LAYER
 	strip_delay = 10
-	var/max_storage = 40
+	var/max_storage = 60
 	var/list/bullets = list()
 	sewrepair = TRUE
 
@@ -63,12 +63,19 @@
 
 // Experimental code from quivers to try to get scooping to work
 
+/obj/item/ammopouch/bullets
+	var/casing_type = /obj/item/ammo_casing/caseless/rogue/bullet/solaris
+
 /obj/item/ammopouch/bullets/Initialize()
 	..()
 	for(var/i in 1 to max_storage)
-		var/obj/item/ammo_casing/caseless/rogue/bullet/solaris/A = new()
+		var/obj/item/ammo_casing/caseless/rogue/bullet/solaris/A = new casing_type()
 		bullets += A
 	update_icon()
+
+/obj/item/ammopouch/bullets/steel
+	name = "steel shot pouch"
+	casing_type = /obj/item/ammo_casing/caseless/rogue/bullet/solaris/steel
 
 /obj/item/ammopouch/attack_turf(turf/T, mob/living/user)
 	if(bullets.len >= max_storage)
