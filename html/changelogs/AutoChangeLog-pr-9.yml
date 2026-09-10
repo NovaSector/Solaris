@@ -1,0 +1,17 @@
+author: "misterreporter"
+delete-after: True
+changes:
+  - balance: "Firearms (handgonne, arquebus, arquebus pistol) now scale ranged accuracy with Perception and Firearms skill, matching bows and crossbows — precise shots (head/neck) are no longer far less reliable than with a bow of equal skill."
+  - balance: "Parrying with a firearm now scales with your Firearms skill instead of relying purely on the weapon's flat defense."
+  - balance: "Firearm bullets now have a chance to land as blunt trauma instead of always being a piercing wound."
+  - balance: "Arc-intent aim time for firearms reduced to match shoot intent (was roughly twice as long)."
+  - balance: "Adjusted firearm wdefense, durability, and ammo pouch capacity."
+  - bugfix: "Firearms can now be repaired with a hammer on a table or anvil like other weapons."
+  - bugfix: "Fixed hammer-repair not working on any gun (bows, crossbows, slings included) due to a missing hit-flag."
+  - bugfix: "Fixed muzzle smoke rendering behind the shooter as well as in front when turning mid-shot, and fixed its orientation on east/west shots."
+  - bugfix: "Fixed the Reiter knight subclass not spawning with its mount."
+  - bugfix: "Renamed the \"firearm\" receiver item to \"firearm parts\" to match its crafting recipe name in the encyclopedia."
+  - qol: "Muzzleloading firearms now show their load state (unloaded / shot loaded / ready to fire) on examine."
+  - qol: "Muzzle smoke from firearms is smaller and shorter-lived."
+  - rscadd: "Added a craftable Gonne Shot Pouch recipe."
+  - rscadd: "Added iron and steel musketball ammo pouches to the smith vendor."
