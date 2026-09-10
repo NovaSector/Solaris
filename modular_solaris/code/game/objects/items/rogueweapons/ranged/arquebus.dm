@@ -38,6 +38,7 @@
 	pickup_sound = 'modular_solaris/sound/sheath_sounds/draw_from_holster.ogg'
 	equip_sound = 'modular_solaris/sound/sheath_sounds/put_back_to_holster.ogg'
 	wdefense = 8
+	max_integrity = 140
 	var/spread_num = 10
 	var/damfactor = 2.5
 	var/load_time = 40
@@ -287,6 +288,7 @@
 	pickup_sound = 'modular_solaris/sound/sheath_sounds/draw_from_holster.ogg'
 	equip_sound = 'modular_solaris/sound/sheath_sounds/put_back_to_holster.ogg'
 	slot_flags = ITEM_SLOT_HIP
+	max_integrity = 100
 	var/damfactor = 2
 	var/load_time = 35
 	var/obj/item/ramrod/myrod = null

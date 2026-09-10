@@ -37,6 +37,7 @@
 	pickup_sound = 'modular_solaris/sound/sheath_sounds/draw_from_holster.ogg'
 	equip_sound = 'modular_solaris/sound/sheath_sounds/put_back_to_holster.ogg'
 	wdefense = 5
+	max_integrity = 100
 	var/spread_num = 10
 	var/damfactor = 1.5
 	var/load_time = 40
