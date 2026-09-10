@@ -14,7 +14,7 @@
 	bloody_icon_state = "bodyblood"
 	alternate_worn_layer = UNDER_CLOAK_LAYER
 	strip_delay = 10
-	var/max_storage = 40
+	var/max_storage = 60
 	var/list/bullets = list()
 	sewrepair = TRUE
 
