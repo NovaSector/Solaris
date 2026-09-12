@@ -127,6 +127,7 @@ SUBSYSTEM_DEF(ticker)
 
 	start_at = world.time + (CONFIG_GET(number/lobby_countdown) * 10)
 	apply_scheduled_pregame_delay() // modular_solaris/code/modules/admin/delay_pregame_on_reboot.dm
+	apply_persistent_admin_notice() // modular_solaris/code/modules/admin/persistent_admin_notice.dm
 	// Offset time drift but start right in the morning of Monday.
 	gametime_offset = 288001
 	return ..()
