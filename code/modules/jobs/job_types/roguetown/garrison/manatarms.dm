@@ -202,12 +202,12 @@
 			if("Crossbow")
 				beltr = /obj/item/quiver/bolt/standard
 				backl = /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow
-			if("Bow") // They can head down to the armory to sideshift into one of the other bows.
+			if("Bow")
 				beltr = /obj/item/quiver/arrows
-				backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve
+				backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/watchman
 			if("Sling")
 				beltr = /obj/item/quiver/sling/iron
-				r_hand = /obj/item/gun/ballistic/revolver/grenadelauncher/sling // Both are belt slots and it's not worth setting where the cugel goes for everyone else, sad.
+				r_hand = /obj/item/gun/ballistic/revolver/grenadelauncher/sling
 			if("Handgonner") // Solaris-owned: see modular_solaris/.../garrison/manatarms.dm for the actual loadout.
 				equip_handgonner(H)
 
