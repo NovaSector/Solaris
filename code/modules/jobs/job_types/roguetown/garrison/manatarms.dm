@@ -207,7 +207,7 @@
 				backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/watchman
 			if("Sling")
 				beltr = /obj/item/quiver/sling/iron
-				r_hand = /obj/item/gun/ballistic/revolver/grenadelauncher/sling
+				l_hand = /obj/item/gun/ballistic/revolver/grenadelauncher/sling
 			if("Handgonner") // Solaris-owned: see modular_solaris/.../garrison/manatarms.dm for the actual loadout.
 				equip_handgonner(H)
 
