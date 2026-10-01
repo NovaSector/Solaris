@@ -221,9 +221,7 @@
 		spread = 0
 	for(var/obj/item/ammo_casing/CB in get_ammo_list(FALSE, TRUE))
 		var/obj/projectile/BB = CB.BB
-		BB.accuracy += (user.STAPER - 8) * 3
-		BB.bonus_accuracy += (user.STAPER - 8)
-		BB.bonus_accuracy += (firearm_skill * 5)
+		BB.aim_peak = ACC_RANGED_BASE + (firearm_skill * ACC_RANGED_PER_SKILL) // Same formula as AP's grenadelauncher/proc/apply_ranged_accuracy (#8727), using firearms skill.
 		BB.damage = BB.damage * damfactor
 		BB.firer = user
 	reloaded = FALSE
@@ -458,9 +456,7 @@
 		spread = 0
 	for(var/obj/item/ammo_casing/CB in get_ammo_list(FALSE, TRUE))
 		var/obj/projectile/BB = CB.BB
-		BB.accuracy += (user.STAPER - 8) * 3
-		BB.bonus_accuracy += (user.STAPER - 8)
-		BB.bonus_accuracy += (firearm_skill * 5)
+		BB.aim_peak = ACC_RANGED_BASE + (firearm_skill * ACC_RANGED_PER_SKILL) // Same formula as AP's grenadelauncher/proc/apply_ranged_accuracy (#8727), using firearms skill.
 		BB.damage = BB.damage * damfactor
 		BB.firer = user
 	reloaded = FALSE
