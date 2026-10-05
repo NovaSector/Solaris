@@ -1,0 +1,5 @@
+author: "misterreporter"
+delete-after: True
+changes:
+  - balance: "Firearms (arquebus, arquebus pistol, handgonne) now use the new ranged accuracy system, scaling with Firearms skill. Perception no longer adds firearm accuracy."
+  - bugfix: "The Man-at-Arms Skirmisher's sling spawns in the left hand again, matching Azure Peak."
