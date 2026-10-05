@@ -18,6 +18,7 @@
 	var/quality = SMELTERY_LEVEL_NORMAL // For it not to ruin recipes that need it
 	var/lumber = /obj/item/grown/log/tree/small //These are solely for lumberjack calculations
 	var/lumber_amount = 1
+	materia = list(/datum/materia_aspect/plant)
 
 /obj/item/grown/log/tree/get_mechanics_examine(mob/user)
 	. = ..()
@@ -336,7 +337,7 @@
 		/datum/crafting_recipe/roguetown/survival/wickercloak,
 		/datum/crafting_recipe/roguetown/survival/torch,
 		/datum/crafting_recipe/roguetown/survival/stonearrow,
-		/datum/crafting_recipe/roguetown/survival/stonearrow_five,
+		/datum/crafting_recipe/roguetown/survival/stonearrow_six,
 		/datum/crafting_recipe/roguetown/survival/wood_stake
 		)
 
@@ -369,7 +370,7 @@
 	if(istype(I, /obj/item/grown/log/tree/stick))
 		var/obj/item/natural/B = I
 		var/obj/item/natural/bundle/stick/N = new(src.loc)
-		to_chat(user, "I tie the sticks into a bundle.")
+		to_chat(user, span_info("I tie the sticks into a bundle."))
 		qdel(B)
 		qdel(src)
 		user.put_in_hands(N)
@@ -379,10 +380,10 @@
 			if(B.amount < B.maxamount)
 				B.amount++
 				B.update_bundle()
-				user.visible_message("[user] adds [src] to [I].", "I add [src] to [I].")
+				user.visible_message(span_info("[user] adds [src] to [I]."), span_info("I add [src] to [I]."))
 				qdel(src)
 			else
-				to_chat(user, "I can't add any more sticks to the bundle without it falling apart.")
+				to_chat(user, span_info("I can't add any more sticks to the bundle without it falling apart."))
 			return
 
 // FOR SOME GODDAMN REASON STICKS ARENT A NATURAL AND ARE THEIR OWN THING. UGH.
@@ -434,6 +435,7 @@
 	gripped_intents = null
 	slot_flags = ITEM_SLOT_MOUTH|ITEM_SLOT_HIP
 	lumber_amount = 0
+	obj_flags_ignore = TRUE // needed for staking iron ingots
 
 /obj/item/grown/log/tree/stake/get_mechanics_examine(mob/user)
 	. = ..()
@@ -467,22 +469,24 @@
 	AddComponent(/datum/component/deaditeslayer, time = 10 SECONDS) // improvised as hell, so it takes a while. sharpen it first you peasant
 
 /obj/item/grown/log/tree/stake/attack_obj(obj/O, mob/living/user)
-	. = ..()
 	if(isitem(O))
 		var/obj/item/I = O
 		if(istype(I, /obj/item/ingot/iron))
 			if(!do_after(user, 4 SECONDS, target = I))
-				return
-			to_chat(user, span_warning("The [user] breaks an [I] into small parts with the stake!"))
+				return ..()
+			user.visible_message(span_warning("[user] breaks \an [I] into small parts with [src]!"))
 			new /obj/item/scrap(get_turf(I))
 			qdel(I)
+			return
 		if(I.anvilrepair)
 			if(I.smeltresult == /obj/item/ingot/iron)
 				if(!do_after(user, 4 SECONDS, target = I))
-					return
-				to_chat(user, span_warning("The [user] breaks an [I] into small parts with the stake!"))
+					return ..()
+				user.visible_message(span_warning("[user] breaks \an [I] into small parts with [src]!"))
 				new /obj/item/scrap(get_turf(I))
 				qdel(I)
+				return
+	. = ..()
 
 /////////////
 // Planks //
